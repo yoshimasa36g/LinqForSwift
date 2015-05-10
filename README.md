@@ -96,11 +96,6 @@ To use LINQ for Swift, simply copy these class file into your project folder.
 * Enumerable.swift
 * CoreDataSet.swift(optional)
 
-## Reference
-
-* [Enumerable](#enumerable)
-* [CoreDataSet](#coredataset)
-
 ## Enumerable <a name="enumerable" />
 
 * [generationg methods](#generators)
