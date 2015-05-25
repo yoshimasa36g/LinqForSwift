@@ -96,11 +96,6 @@ To use LINQ for Swift, simply copy these class file into your project folder.
 * Enumerable.swift
 * CoreDataSet.swift(optional)
 
-## Reference
-
-* [Enumerable](#enumerable)
-* [CoreDataSet](#coredataset)
-
 ## Enumerable <a name="enumerable" />
 
 * [generationg methods](#generators)
@@ -1411,16 +1406,238 @@ result[false]> 10, 30, 50, 70, 90
 
 ### action methods <a name="action" />
 
-:pencil: Now writing... :pencil:
+#### each, eachWithIndex
+
+Performs the specified action on each element of the sequence.
+
+##### declaration
+
+```swift
+final func each(action: T -> Void)
+
+final func eachWithIndex(action: (T, Int) -> Void)
+```
+
+##### example
+
+```swift
+Enumerable.from(["a", "b", "c", "d", "e"]).each { Swift.print($0) }
+> abcde
+
+Enumerable.from(["a", "b", "c", "d", "e"])
+    .eachWithIndex { Swift.print("\($1):\($0),") }
+> 0:a,1:b,2:c,3:d,4:e,
+```
+
+#### force
+
+Executes the query that has been delayed
+
+##### declaration
+
+```swift
+final func force() -> Void
+```
+
+##### example
+
+```swift
+Enumerable.from(["a", "b", "c", "d", "e"]).print().force()
+> abcde
+```
 
 ---
 
 ### for debug methods <a name="debug" />
 
-:pencil: Now writing... :pencil:
+#### dump
+
+Dump each element of the sequence.
+
+##### declaration
+
+```swift
+final func dump() -> Enumerable
+```
+
+##### example
+
+```swift
+Enumerable.from(["a", "b", "c", "d", "e"]).dump().force()
+> - a
+  - b
+  - c
+  - d
+  - e
+```
+
+#### print
+
+Prints each element of a sequence.
+
+##### declaration
+
+```swift
+final func print() -> Enumerable
+
+final func print(formatter: T -> String) -> Enumerable
+```
+
+##### example
+
+```swift
+Enumerable.from(["a", "b", "c", "d", "e"]).print().force()
+> abcde
+
+Enumerable.from(["a", "b", "c", "d", "e"]).print { $0 + $0 }.force()
+> aabbccddee
+```
+
+#### println
+
+Prints each element of a sequence and a newline character.
+
+##### declaration
+
+```swift
+final func println() -> Enumerable
+
+final func println(formatter: T -> String) -> Enumerable
+```
+
+##### example
+
+```swift
+Enumerable.from(1...5).println()
+    .where$ { $0 % 2 == 0}.println()
+    .select { $0 * 10 }.println()
+    .force()
+> 1
+  2
+  2
+  20
+  3
+  4
+  4
+  40
+  5
+
+Enumerable.from(1...5).println { "from:\($0)" }
+    .where$ { x -> Bool in x % 2 == 0}.println { "where:\($0)" }
+    .select { x -> Int in x * 10 }.println { "select:\($0)" }
+    .force()
+> from:1
+  from:2
+  where:2
+  select:20
+  from:3
+  from:4
+  where:4
+  select:40
+  from:5
+```
 
 ---
 
 ## CoreDataSet <a name="coredataset" />
 
-:pencil: Now writing... :pencil:
+#### initializer
+
+Creates a CoreDataSet object.
+
+##### declaration
+
+```swift
+init(_ context: NSManagedObjectContext)
+```
+
+##### example
+
+```swift
+let models = CoreDataSet<Model>(appDelegate.managedObjectContext!)
+```
+
+#### orderBy
+
+Sorts the items of a entity in ascending order according to a key
+
+```swift
+public final func orderBy(fieldName: String) -> CoreDataSet
+
+public final func orderBy
+    (fieldName: String, comparator: NSComparator) -> CoreDataSet
+
+public final func orderBy
+    (fieldName: String, selector: Selector) -> CoreDataSet
+```
+
+#### orderByDescending
+
+Sorts the items of a entity in descending order according to a key.
+
+```swift
+public final func orderByDescending(fieldName: String) -> CoreDataSet
+
+public final func orderByDescending
+    (fieldName: String, comparator: NSComparator) -> CoreDataSet
+
+public final func orderByDescending
+    (fieldName: String, selector: Selector) -> CoreDataSet
+```
+
+#### skip
+
+Bypasses a specified number of items in a entity and then returns the remaining elements.
+
+```swift
+public final func skip(count: Int) -> CoreDataSet
+```
+
+#### take
+
+Returns a specified number of contiguous items from the start of a entity.
+
+```swift
+public final func take(count: Int) -> CoreDataSet
+```
+
+#### toArray
+
+Execute fetch request and convert result to Array<T>.
+
+```swift
+public final func toArray() -> [T]
+```
+
+#### toEnumerable
+
+Execute fetch request and convert result to Enumerable<T>.
+
+```swift
+public final func toEnumerable() -> Enumerable<T>
+```
+
+#### where$
+
+Filters a entity of values based on a NSPredicate.
+
+```swift
+public final func where$
+    (format predicateFormat: String, _ args: CVarArgType...) -> CoreDataSet
+
+public final func where$(
+    format predicateFormat: String,
+    argumentArray arguments: [AnyObject]?
+    ) -> CoreDataSet
+
+public final func where$(
+    format predicateFormat: String,
+    arguments argList: CVaListPointer
+    ) -> CoreDataSet
+
+public final func where$(value: Bool) -> CoreDataSet
+
+public final func Where(
+    block: (AnyObject!, [NSObject : AnyObject]!) -> Bool
+    ) -> CoreDataSet
+```
