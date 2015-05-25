@@ -155,7 +155,7 @@ class EnumerablePagingSpec: QuickSpec {
             describe("skip") {
                 it("is bypasses a specified number of elements in a sequence and then returns the remaining elements") {
                     let result: Enumerable<Book> = enumerableBooks.skip(3)
-                    result.eachWithIndex { (book: Book, index: Int) -> Void in
+                    result.each { (book: Book, index: Int) -> Void in
                         let originalBook: Book = books[index + 3]
                         expect(book.title).to(equal(originalBook.title))
                         expect(book.author).to(equal(originalBook.author))
@@ -169,7 +169,7 @@ class EnumerablePagingSpec: QuickSpec {
                     let result: Enumerable<Book> = enumerableBooks.skipWhile {
                         (book: Book) -> Bool in book.publicationYear < 1920
                     }
-                    result.eachWithIndex { (book: Book, index: Int) -> Void in
+                    result.each { (book: Book, index: Int) -> Void in
                         let originalBook: Book = books[index + 2]
                         expect(book.title).to(equal(originalBook.title))
                         expect(book.author).to(equal(originalBook.author))
@@ -181,7 +181,7 @@ class EnumerablePagingSpec: QuickSpec {
                         (book: Book, index: Int) -> Bool in
                         book.publicationYear * index < 4000
                     }
-                    result.eachWithIndex { (book: Book, index: Int) -> Void in
+                    result.each { (book: Book, index: Int) -> Void in
                         let originalBook: Book = books[index + 3]
                         expect(book.title).to(equal(originalBook.title))
                         expect(book.author).to(equal(originalBook.author))
@@ -194,7 +194,7 @@ class EnumerablePagingSpec: QuickSpec {
                 it("is returns a specified number of contiguous elements from the start of a sequence") {
                     let result: Enumerable<Book> = enumerableBooks.take(3)
                     expect(result.count()).to(equal(3))
-                    result.eachWithIndex { (book: Book, index: Int) -> Void in
+                    result.each { (book: Book, index: Int) -> Void in
                         let originalBook: Book = books[index]
                         expect(book.title).to(equal(originalBook.title))
                         expect(book.author).to(equal(originalBook.author))
@@ -209,7 +209,7 @@ class EnumerablePagingSpec: QuickSpec {
                         (book: Book) -> Bool in book.publicationYear < 1920
                     }
                     expect(result.count()).to(equal(2))
-                    result.eachWithIndex { (book: Book, index: Int) -> Void in
+                    result.each { (book: Book, index: Int) -> Void in
                         let originalBook: Book = books[index]
                         expect(book.title).to(equal(originalBook.title))
                         expect(book.author).to(equal(originalBook.author))
@@ -221,7 +221,7 @@ class EnumerablePagingSpec: QuickSpec {
                         (book: Book, index: Int) -> Bool in book.publicationYear * index < 5000
                     }
                     expect(result.count()).to(equal(4))
-                    result.eachWithIndex { (book: Book, index: Int) -> Void in
+                    result.each { (book: Book, index: Int) -> Void in
                         let originalBook: Book = books[index]
                         expect(book.title).to(equal(originalBook.title))
                         expect(book.author).to(equal(originalBook.author))

@@ -47,7 +47,7 @@ class EnumerableSetSpec: QuickSpec {
             describe("concat") {
                 it("is concatenates two sequences") {
                     let allBooks: Enumerable<Book> = enumerableBooks.concat(otherBooks)
-                    allBooks.eachWithIndex { (book: Book, index: Int) in
+                    allBooks.each { (book: Book, index: Int) in
                         let originalBook: Book
                         if (index < books.count) {
                             originalBook = books[index]
@@ -75,7 +75,7 @@ class EnumerableSetSpec: QuickSpec {
                 var defaultBook: Book = Book(title: "title", author: "author", publicationYear: 2015)
                 it("is returns the elements of the specified sequence") {
                     let result: Enumerable<Book> = enumerableBooks.defaultIfEmpty(defaultBook)
-                    result.eachWithIndex { (book: Book, index: Int) in
+                    result.each { (book: Book, index: Int) in
                         let originalBook: Book = books[index]
                         expect(book.title).to(equal(originalBook.title))
                         expect(book.author).to(equal(originalBook.author))
@@ -85,10 +85,10 @@ class EnumerableSetSpec: QuickSpec {
                 it("is returns the specified value in a singleton collection if the sequence is empty") {
                     let emptyBooks: Enumerable<Book> = Enumerable<Book>.empty()
                     let result: Enumerable<Book> = emptyBooks.defaultIfEmpty(defaultBook)
-                    result.each {
-                        expect($0.title).to(equal(defaultBook.title))
-                        expect($0.author).to(equal(defaultBook.author))
-                        expect($0.publicationYear).to(equal(defaultBook.publicationYear))
+                    result.each { (x: Book) -> Void in
+                        expect(x.title).to(equal(defaultBook.title))
+                        expect(x.author).to(equal(defaultBook.author))
+                        expect(x.publicationYear).to(equal(defaultBook.publicationYear))
                     }
                     expect(result.count()).to(equal(1))
                 }
@@ -109,7 +109,7 @@ class EnumerableSetSpec: QuickSpec {
                 
                 it("is returns distinct elements from a sequence by using a specified key generator") {
                     let result: Enumerable<Book> = dupBooks.distinct { $0.publicationYear }
-                    result.eachWithIndex { (book: Book, index: Int) in
+                    result.each { (book: Book, index: Int) in
                         expect(book.title).to(equal(books[index].title))
                         expect(book.author).to(equal(books[index].author))
                         expect(book.publicationYear).to(equal(books[index].publicationYear))
@@ -123,7 +123,7 @@ class EnumerableSetSpec: QuickSpec {
                             && first.publicationYear == second.publicationYear
                     }
                     let result: Enumerable<Book> = dupBooks.distinct(comparer)
-                    result.eachWithIndex { (book: Book, index: Int) in
+                    result.each { (book: Book, index: Int) in
                         expect(book.title).to(equal(books[index].title))
                         expect(book.author).to(equal(books[index].author))
                         expect(book.publicationYear).to(equal(books[index].publicationYear))
@@ -145,7 +145,7 @@ class EnumerableSetSpec: QuickSpec {
                 
                 it("is produces the set difference of two sequences by using the key generator") {
                     let result: Enumerable<Book> = enumerableBooks.except(excludeBooks) { $0.publicationYear }
-                    result.eachWithIndex { (book: Book, index: Int) in
+                    result.each { (book: Book, index: Int) in
                         expect(book.title).to(equal(includeBooks[index].title))
                         expect(book.author).to(equal(includeBooks[index].author))
                         expect(book.publicationYear).to(equal(includeBooks[index].publicationYear))
@@ -154,7 +154,7 @@ class EnumerableSetSpec: QuickSpec {
                 
                 it("is produces the set difference of two sequences by using the specified comparer") {
                     let result: Enumerable<Book> = enumerableBooks.except(excludeBooks) { $0.title == $1.title }
-                    result.eachWithIndex { (book: Book, index: Int) in
+                    result.each { (book: Book, index: Int) in
                         expect(book.title).to(equal(includeBooks[index].title))
                         expect(book.author).to(equal(includeBooks[index].author))
                         expect(book.publicationYear).to(equal(includeBooks[index].publicationYear))

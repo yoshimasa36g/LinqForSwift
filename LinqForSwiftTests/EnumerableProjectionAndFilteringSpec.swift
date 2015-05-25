@@ -39,7 +39,7 @@ class EnumerableProjectionAndFilteringSpec: QuickSpec {
             describe("select") {
                 it("is projects each element of a sequence into a new form") {
                     let titles: Enumerable<String> = enumerableBooks.select { $0.title }
-                    titles.eachWithIndex { (title: String, index: Int) in
+                    titles.each { (title: String, index: Int) in
                         switch index {
                         case 0:
                             expect(title).to(equal("Crime and Punishment"))
@@ -58,7 +58,7 @@ class EnumerableProjectionAndFilteringSpec: QuickSpec {
                 }
                 it("is projects each element of a sequence into a new form by incorporating the element's index") {
                     let titles: Enumerable<String> = enumerableBooks.select { "\($1):\($0.title)" }
-                    titles.eachWithIndex { (title: String, index: Int) in
+                    titles.each { (title: String, index: Int) in
                         switch index {
                         case 0:
                             expect(title).to(equal("0:Crime and Punishment"))
@@ -85,7 +85,7 @@ class EnumerableProjectionAndFilteringSpec: QuickSpec {
                 ]
                 it("is Projects each element of a sequence to an Enumerable<T>, and flattens the resulting sequences into one sequence") {
                     let result: Enumerable<String> = Enumerable.from(petOwners).selectMany { $0.pets }
-                    result.eachWithIndex { (pet: String, index: Int) in
+                    result.each { (pet: String, index: Int) in
                         switch index {
                         case 0: expect(pet).to(equal("Scruffy"))
                         case 1: expect(pet).to(equal("Sam"))
@@ -100,7 +100,7 @@ class EnumerableProjectionAndFilteringSpec: QuickSpec {
                 it("is the index of each source element is used in the projected form of that element") {
                     let result: Enumerable<String> = Enumerable.from(petOwners)
                         .selectMany { (x, i) in x.pets.map { "\(i)\($0)" } }
-                    result.eachWithIndex { (pet: String, index: Int) in
+                    result.each { (pet: String, index: Int) in
                         switch index {
                         case 0: expect(pet).to(equal("0Scruffy"))
                         case 1: expect(pet).to(equal("0Sam"))
@@ -115,7 +115,7 @@ class EnumerableProjectionAndFilteringSpec: QuickSpec {
                 it("is invokes a result selector function on each element therein") {
                     let result: Enumerable<(owner: String, pet: String)> = Enumerable.from(petOwners)
                         .selectMany({ $0.pets }) { (owner: $0.name, pet: $1) }
-                    result.eachWithIndex { (x, index: Int) in
+                    result.each { (x, index: Int) in
                         switch index {
                         case 0: expect(x.owner).to(equal("Higa, Sidney")); expect(x.pet).to(equal("Scruffy"))
                         case 1: expect(x.owner).to(equal("Higa, Sidney")); expect(x.pet).to(equal("Sam"))
@@ -130,7 +130,7 @@ class EnumerableProjectionAndFilteringSpec: QuickSpec {
                 it("is the index of each source element is used in the intermediate projected form of that element") {
                     let result: Enumerable<(owner: String, pet: String)> = Enumerable.from(petOwners)
                         .selectMany({ (x, i) in x.pets.map { "\(i)\($0)" } }) { (owner: $0.name, pet: $1) }
-                    result.eachWithIndex { (x, index: Int) in
+                    result.each { (x, index: Int) in
                         switch index {
                         case 0: expect(x.owner).to(equal("Higa, Sidney")); expect(x.pet).to(equal("0Scruffy"))
                         case 1: expect(x.owner).to(equal("Higa, Sidney")); expect(x.pet).to(equal("0Sam"))
@@ -149,7 +149,7 @@ class EnumerableProjectionAndFilteringSpec: QuickSpec {
                     let mixedTypeEnumerable: Enumerable<AnyObject> = Enumerable<AnyObject>.from([1, 2, "foo", 3, "bar"])
                     let result: Enumerable<String> = mixedTypeEnumerable.ofType(String)
                     expect(result.count()).to(equal(2))
-                    result.eachWithIndex { (element: String, index: Int) in
+                    result.each { (element: String, index: Int) in
                         switch index {
                         case 0:
                             expect(element).to(equal("foo"))

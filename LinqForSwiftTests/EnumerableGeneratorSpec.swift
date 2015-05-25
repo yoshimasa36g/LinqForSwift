@@ -84,7 +84,7 @@ class EnumerableGeneratorSpec: QuickSpec {
             
             describe("from") {
                 it("is create Enumerable instance from sequence") {
-                    enumerableBooks.eachWithIndex { (book: Book, index: Int) -> Void in
+                    enumerableBooks.each { (book: Book, index: Int) -> Void in
                         let originalBook: Book = books[index]
                         expect(book.title).to(equal(originalBook.title))
                         expect(book.author).to(equal(originalBook.author))

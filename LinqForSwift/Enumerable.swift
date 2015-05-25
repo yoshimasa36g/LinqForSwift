@@ -1097,12 +1097,10 @@ public class Enumerable<T>: SequenceType {
     :returns: The average of the sequence of values
     */
     final func average<N: NumericType>(selector: T -> N) -> Double {
-        var total: N = 0
         var count = 0
-
-        self.each {
-            total += selector($0)
+        let total = self.aggregate(0) { (x: N, y: T) -> N in
             count += 1
+            return x + selector(y)
         }
 
         return total.toDouble() / Double(count)
@@ -1126,13 +1124,7 @@ public class Enumerable<T>: SequenceType {
     :returns: A number that represents how many elements in the sequence satisfy the condition in the predicate function
     */
     final func count(predicate: T -> Bool) -> Int {
-        var count = 0
-        self.each {
-            if predicate($0) {
-                count += 1
-            }
-        }
-        return count
+        return self.where$(predicate).aggregate(0) { (x, _) -> Int in x + 1 }
     }
 
     /**
@@ -1559,7 +1551,7 @@ public class Enumerable<T>: SequenceType {
     :param: action - A function to perform on each element of the source sequence
     */
     final func each(action: T -> Void) {
-        self.eachWithIndex { (x, _) in action(x) }
+        self.each { (x, _) in action(x) }
     }
 
     /**
@@ -1568,7 +1560,7 @@ public class Enumerable<T>: SequenceType {
 
     :param: action - A function to perform on each element of the source sequence; the second parameter of the function represents the index of the source element
     */
-    final func eachWithIndex(action: (T, Int) -> Void) {
+    final func each(action: (T, Int) -> Void) {
         var index = 0
         for element in self {
             action(element, index++)

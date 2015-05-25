@@ -56,7 +56,7 @@ class EnumerableJoinSpec: QuickSpec {
                             return (owner: owner.name, pet: pet.name)
                     })
                     expect(result.count()).to(equal(4))
-                    result.eachWithIndex { (r: (owner: String, pet: String), i: Int) in
+                    result.each { (r: (owner: String, pet: String), i: Int) in
                         switch r.owner {
                         case "Hedlund, Magnus":
                             expect(r.pet).to(equal("Daisy"))

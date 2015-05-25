@@ -17,7 +17,7 @@ class EnumerableOrderingSpec: QuickSpec {
             describe("orderBy") {
                 it("is sorts the elements of a sequence in ascending order according to a key") {
                     let sortedBooks: OrderedEnumerable<Book> = enumerableBooks.orderBy { $0.publicationYear }
-                    sortedBooks.eachWithIndex { (book: Book, index: Int) in
+                    sortedBooks.each { (book: Book, index: Int) in
                         switch index {
                         case 0:
                             expect(book.title).to(equal("La Divina Commedia"))
@@ -39,7 +39,7 @@ class EnumerableOrderingSpec: QuickSpec {
             describe("orderByDescending") {
                 it("is sorts the elements of a sequence in descending order according to a key") {
                     let sortedBooks: OrderedEnumerable<Book> = enumerableBooks.orderByDescending { $0.publicationYear }
-                    sortedBooks.eachWithIndex { (book: Book, index: Int) in
+                    sortedBooks.each { (book: Book, index: Int) in
                         switch index {
                         case 0:
                             expect(book.title).to(equal("Les Enfants Terribles"))
@@ -61,7 +61,7 @@ class EnumerableOrderingSpec: QuickSpec {
             describe("reverse") {
                 it("is inverts the order of the elements in a sequence") {
                     let sortedBooks: Enumerable<Book> = enumerableBooks.orderBy { $0.publicationYear }.reverse()
-                    sortedBooks.eachWithIndex { (book: Book, index: Int) in
+                    sortedBooks.each { (book: Book, index: Int) in
                         switch index {
                         case 0:
                             expect(book.title).to(equal("Les Enfants Terribles"))
