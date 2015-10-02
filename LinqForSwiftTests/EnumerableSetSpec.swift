@@ -173,7 +173,7 @@ class EnumerableSetSpec: QuickSpec {
                     ]
                     let result: Enumerable<Book> = enumerableBooks.intersect(testBooks) { $0.title == $1.title && $0.author == $1.author }
                     expect(result.count()).to(equal(2))
-                    var g: GeneratorOf<Book> = result.generate()
+                    let g: AnyGenerator<Book> = result.generate()
                     let first: Book? = g.next()
                     expect(first!.title).to(equal("Les Enfants Terribles"))
                     let second: Book? = g.next()

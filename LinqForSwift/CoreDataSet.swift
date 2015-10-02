@@ -12,7 +12,7 @@ import CoreData
 /**
 Provides a set of methods for querying objects that implement NSManagedObject
 */
-@availability(iOS, introduced=3.0)
+@available(iOS, introduced=3.0)
 public class CoreDataSet<T: NSManagedObject> {
     private let context: NSManagedObjectContext
     private var predicates: [NSPredicate]
@@ -23,7 +23,7 @@ public class CoreDataSet<T: NSManagedObject> {
     /**
     Creates a CoreDataSet
     
-    :param: context - The NSManagedObjectContext
+    - parameter context: - The NSManagedObjectContext
     */
     init(_ context: NSManagedObjectContext) {
         self.context = context
@@ -36,7 +36,7 @@ public class CoreDataSet<T: NSManagedObject> {
     /**
     Creates a new CoreDataSet
     
-    :param: new - The new CoreDataSEt
+    - parameter new: - The new CoreDataSEt
     */
     private init(_ new: CoreDataSet<T>) {
         self.context = new.context
@@ -49,8 +49,8 @@ public class CoreDataSet<T: NSManagedObject> {
     /**
     Sorts the elements of a sequence in ascending order according to a key
     
-    :param: fieldName - A fieldName for NSSortDescriptor
-    :returns: A CoreDataSet that added the sort order condition
+    - parameter fieldName: - A fieldName for NSSortDescriptor
+    - returns: A CoreDataSet that added the sort order condition
     */
     public final func orderBy(fieldName: String) -> CoreDataSet {
         return addSortDescriptor(NSSortDescriptor(key: fieldName, ascending: true))
@@ -59,9 +59,9 @@ public class CoreDataSet<T: NSManagedObject> {
     /**
     Sorts the elements of a sequence in ascending order according to a key
     
-    :param: fieldName - A fieldName for NSSortDescriptor
-    :param: comparator - A comparator for NSSortDescriptor
-    :returns: A CoreDataSet that added the sort order condition
+    - parameter fieldName: - A fieldName for NSSortDescriptor
+    - parameter comparator: - A comparator for NSSortDescriptor
+    - returns: A CoreDataSet that added the sort order condition
     */
     public final func orderBy(fieldName: String, comparator: NSComparator) -> CoreDataSet {
         return addSortDescriptor(NSSortDescriptor(key: fieldName, ascending: true, comparator: comparator))
@@ -70,9 +70,9 @@ public class CoreDataSet<T: NSManagedObject> {
     /**
     Sorts the elements of a sequence in ascending order according to a key
     
-    :param: fieldName - A fieldName for NSSortDescriptor
-    :param: selector - A selector for NSSortDescriptor
-    :returns: A CoreDataSet that added the sort order condition
+    - parameter fieldName: - A fieldName for NSSortDescriptor
+    - parameter selector: - A selector for NSSortDescriptor
+    - returns: A CoreDataSet that added the sort order condition
     */
     public final func orderBy(fieldName: String, selector: Selector) -> CoreDataSet {
         return addSortDescriptor(NSSortDescriptor(key: fieldName, ascending: true, selector: selector))
@@ -81,8 +81,8 @@ public class CoreDataSet<T: NSManagedObject> {
     /**
     Sorts the elements of a sequence in descending order according to a key
     
-    :param: fieldName - A fieldName for NSSortDescriptor
-    :returns: A CoreDataSet that added the sort order condition
+    - parameter fieldName: - A fieldName for NSSortDescriptor
+    - returns: A CoreDataSet that added the sort order condition
     */
     public final func orderByDescending(fieldName: String) -> CoreDataSet {
         return addSortDescriptor(NSSortDescriptor(key: fieldName, ascending: false))
@@ -91,9 +91,9 @@ public class CoreDataSet<T: NSManagedObject> {
     /**
     Sorts the elements of a sequence in descending order according to a key
     
-    :param: fieldName - A fieldName for NSSortDescriptor
-    :param: comparator - A comparator for NSSortDescriptor
-    :returns: A CoreDataSet that added the sort order condition
+    - parameter fieldName: - A fieldName for NSSortDescriptor
+    - parameter comparator: - A comparator for NSSortDescriptor
+    - returns: A CoreDataSet that added the sort order condition
     */
     public final func orderByDescending(fieldName: String, comparator: NSComparator) -> CoreDataSet {
         return addSortDescriptor(NSSortDescriptor(key: fieldName, ascending: false, comparator: comparator))
@@ -102,9 +102,9 @@ public class CoreDataSet<T: NSManagedObject> {
     /**
     Sorts the elements of a sequence in descending order according to a key
     
-    :param: fieldName - A fieldName for NSSortDescriptor
-    :param: selector - A selector for NSSortDescriptor
-    :returns: A CoreDataSet that added the sort order condition
+    - parameter fieldName: - A fieldName for NSSortDescriptor
+    - parameter selector: - A selector for NSSortDescriptor
+    - returns: A CoreDataSet that added the sort order condition
     */
     public final func orderByDescending(fieldName: String, selector: Selector) -> CoreDataSet {
         return addSortDescriptor(NSSortDescriptor(key: fieldName, ascending: false, selector: selector))
@@ -113,8 +113,8 @@ public class CoreDataSet<T: NSManagedObject> {
     /**
     Bypasses a specified number of elements in a sequence and then returns the remaining elements
     
-    :param: count - A number of elements to skip before returning the remaining elements
-    :returns: A CoreDataSet that added the skip condition
+    - parameter count: - A number of elements to skip before returning the remaining elements
+    - returns: A CoreDataSet that added the skip condition
     */
     public final func skip(count: Int) -> CoreDataSet {
         let new = CoreDataSet(self)
@@ -125,8 +125,8 @@ public class CoreDataSet<T: NSManagedObject> {
     /**
     Returns a specified number of contiguous elements from the start of a sequence
     
-    :param: count - A number of elements to return
-    :returns: A CoreDataSet that added the take condition
+    - parameter count: - A number of elements to return
+    - returns: A CoreDataSet that added the take condition
     */
     public final func take(count: Int) -> CoreDataSet {
         let new = CoreDataSet(self)
@@ -137,33 +137,39 @@ public class CoreDataSet<T: NSManagedObject> {
     /**
     Execute fetch request and convert result to Array<T>
     
-    :returns: An array that contains the result of fetch request
+    - returns: An array that contains the result of fetch request
     */
     public final func toArray() -> [T] {
-        let entity = NSEntityDescription.entityForName(T.getName(), inManagedObjectContext: context)
-        var request = NSFetchRequest()
+        let className = NSStringFromClass(T)
+        let range = className.rangeOfString(".")
+        let entityName = className.substringFromIndex(range!.endIndex)
+        let entity = NSEntityDescription.entityForName(entityName, inManagedObjectContext: context)
+        let request = NSFetchRequest()
         request.entity = entity
         request.sortDescriptors = sorts
         request.fetchOffset = skip
         request.fetchLimit = take
         if predicates.count > 1 {
-            request.predicate = NSCompoundPredicate.andPredicateWithSubpredicates(predicates)
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         } else if predicates.count == 1 {
             request.predicate = predicates[0]
         }
         var error: NSError? = nil
         
-        if let result = context.executeFetchRequest(request, error: &error) {
+        do {
+            let result = try context.executeFetchRequest(request)
             return result as! [T]
+        } catch let error1 as NSError {
+            error = error1
         }
-        println(error?.description)
+        print(error?.description)
         return []
     }
     
     /**
     Execute fetch request and convert result to Enumerable<T>
     
-    :returns: An Enumerable<T> that contains the result of fetch request
+    - returns: An Enumerable<T> that contains the result of fetch request
     */
     public final func toEnumerable() -> Enumerable<T> {
         return Enumerable.from(toArray())
@@ -172,9 +178,9 @@ public class CoreDataSet<T: NSManagedObject> {
     /**
     Filters a sequence of values based on a NSPredicate
     
-    :param: format - A predicate format for NSPredicate
-    :param: args - Some arguments of CVarArgType for NSPredicate
-    :returns: A CoreDataSet that added the predicate
+    - parameter format: - A predicate format for NSPredicate
+    - parameter args: - Some arguments of CVarArgType for NSPredicate
+    - returns: A CoreDataSet that added the predicate
     */
     public final func where$(format predicateFormat: String, _ args: CVarArgType...) -> CoreDataSet {
         let anyArgs = args.map { $0 as! AnyObject }
@@ -184,9 +190,9 @@ public class CoreDataSet<T: NSManagedObject> {
     /**
     Filters a sequence of values based on a NSPredicate
     
-    :param: format - A predicate format for NSPredicate
-    :param: argumentArray - An argument array for NSPredicate
-    :returns: A CoreDataSet that added the predicate
+    - parameter format: - A predicate format for NSPredicate
+    - parameter argumentArray: - An argument array for NSPredicate
+    - returns: A CoreDataSet that added the predicate
     */
     public final func where$(format predicateFormat: String, argumentArray arguments: [AnyObject]?) -> CoreDataSet {
         return addPredicate(NSPredicate(format: predicateFormat, argumentArray: arguments))
@@ -195,9 +201,9 @@ public class CoreDataSet<T: NSManagedObject> {
     /**
     Filters a sequence of values based on a NSPredicate
     
-    :param: format - A predicate format for NSPredicate
-    :param: arguments - An CVaListPointer of argument list for NSPredicate
-    :returns: A CoreDataSet that added the predicate
+    - parameter format: - A predicate format for NSPredicate
+    - parameter arguments: - An CVaListPointer of argument list for NSPredicate
+    - returns: A CoreDataSet that added the predicate
     */
     public final func where$(format predicateFormat: String, arguments argList: CVaListPointer) -> CoreDataSet {
         return addPredicate(NSPredicate(format: predicateFormat, arguments: argList))
@@ -206,8 +212,8 @@ public class CoreDataSet<T: NSManagedObject> {
     /**
     Filters a sequence of values based on a NSPredicate
     
-    :param: value - A boolean value for NSPredicate
-    :returns: A CoreDataSet that added the predicate
+    - parameter value: - A boolean value for NSPredicate
+    - returns: A CoreDataSet that added the predicate
     */
     public final func where$(value: Bool) -> CoreDataSet {
         return addPredicate(NSPredicate(value: value))
@@ -216,19 +222,19 @@ public class CoreDataSet<T: NSManagedObject> {
     /**
     Filters a sequence of values based on a NSPredicate
     
-    :param: block - A predicate block for NSPredicate
-    :returns: A CoreDataSet that added the predicate
+    - parameter block: - A predicate block for NSPredicate
+    - returns: A CoreDataSet that added the predicate
     */
-    @availability(iOS, introduced=4.0)
-    public final func Where(block: (AnyObject!, [NSObject : AnyObject]!) -> Bool) -> CoreDataSet {
+    @available(iOS, introduced=4.0)
+    public final func where$(block: (AnyObject!, [String : AnyObject]?) -> Bool) -> CoreDataSet {
         return addPredicate(NSPredicate(block: block))
     }
     
     /**
     Add predicate to condition of fetch request
     
-    :param: predicate - A NSPredicate object
-    :returns: A CoreDataSet that added the predicate
+    - parameter predicate: - A NSPredicate object
+    - returns: A CoreDataSet that added the predicate
     */
     private final func addPredicate(predicate: NSPredicate) -> CoreDataSet {
         let new = CoreDataSet(self)
@@ -239,8 +245,8 @@ public class CoreDataSet<T: NSManagedObject> {
     /**
     Add sort descriptor to condition of fetch request
     
-    :param: sortDescriptor - A NSSortDescriptor object
-    :returns: A CoreDataSet that added the sort descriptor
+    - parameter sortDescriptor: - A NSSortDescriptor object
+    - returns: A CoreDataSet that added the sort descriptor
     */
     private final func addSortDescriptor(sortDescriptor: NSSortDescriptor) -> CoreDataSet {
         let new = CoreDataSet(self)
@@ -254,11 +260,11 @@ public extension NSManagedObject {
     /**
     Get class name
     
-    :returns: A class name
+    - returns: A class name
     */
     public class func getName() -> String {
-        var name = NSStringFromClass(self)
-        var range = name.rangeOfString(".")
+        let name = NSStringFromClass(self)
+        let range = name.rangeOfString(".")
         return name.substringFromIndex(range!.endIndex)
     }
 }

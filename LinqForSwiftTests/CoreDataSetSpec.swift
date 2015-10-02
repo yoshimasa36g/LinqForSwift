@@ -104,14 +104,15 @@ class CoreDataSetSpec: QuickSpec {
             let entity: NSEntityDescription? = NSEntityDescription.entityForName("Model", inManagedObjectContext: managedObjectContext)
             let fetchRequest: NSFetchRequest = NSFetchRequest()
             fetchRequest.entity = entity
-            var error: NSError? = nil
             var existsTestData: Bool = false
-            if var results: [AnyObject] = managedObjectContext.executeFetchRequest(fetchRequest, error: &error) {
+            do {
+                let results: [AnyObject] = try managedObjectContext.executeFetchRequest(fetchRequest)
                 for m: AnyObject in results {
                     let model: Model = m as! Model
-                    println("test data: \(model.someString), \(model.someInt)")
+                    print("test data: \(model.someString), \(model.someInt)")
                     existsTestData = true
                 }
+            } catch _ as NSError {
             }
             if existsTestData {
                 return

@@ -12,7 +12,6 @@ import Quick
 class EnumerableJoinSpec: QuickSpec {
     override func spec() {
         describe("Enumerable") {
-            let enumerableBooks: Enumerable<Book> = Enumerable.from(books)
             
             describe("groupJoin") {
                 it("is correlates the elements of two sequences based on equality of keys and groups the results") {
@@ -24,21 +23,21 @@ class EnumerableJoinSpec: QuickSpec {
                     })
                     expect(result.count()).to(equal(3))
                     result.each { (owner: String, pets: Enumerable<String>) in
-                        var g: GeneratorOf<String> = pets.generate()
+                        let g: AnyGenerator<String> = pets.generate()
                         switch owner {
                         case "Hedlund, Magnus":
                             expect(pets.count()).to(equal(1))
-                            var first: String? = g.next()
+                            let first: String? = g.next()
                             expect(first!).to(equal("Daisy"))
                         case "Adams, Terry":
                             expect(pets.count()).to(equal(2))
-                            var first: String? = g.next()
+                            let first: String? = g.next()
                             expect(first!).to(equal("Barley"))
-                            var second: String? = g.next()
+                            let second: String? = g.next()
                             expect(second!).to(equal("Boots"))
                         case "Weiss, Charlotte":
                             expect(pets.count()).to(equal(1))
-                            var first: String? = g.next()
+                            let first: String? = g.next()
                             expect(first!).to(equal("Whiskers"))
                         default:
                             break

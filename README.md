@@ -38,14 +38,14 @@ enum Gender {
 let people: [Person] = [/* a lot of people */]
 
 // get names of female of 20s
-let result = Enumerable.from(people)
+let result = people.toEnumerable()
                        .where$ { 20 <= $0.age }
                        .where$ { $0.age < 30 }
                        .where$ { $0.gender == .female }
                        .select { $0.name }
 
 // get people of 20s by gender
-let result2 = Enumerable.from(people)
+let result2 = people.toEnumerable()
                         .where$ { 20 <= $0.age }
                         .where$ { $0.age < 30 }
                         .toLookup { $0.gender }
@@ -270,25 +270,25 @@ let result = Enumerable<Int>.rangeDown(0, step: 3, count: 5)
 > 0, -3, -6, -9, -12
 ```
 
-#### repeat
+#### repeat$
 
 Generates a sequence that contains one repeated value
 
 ##### declaration
 
 ```swift
-final class func repeat(value: T) -> Enumerable
+final class func repeat$(value: T) -> Enumerable
 
-final class func repeat(value: T, count: Int) -> Enumerable
+final class func repeat$(value: T, count: Int) -> Enumerable
 ```
 
 ##### example
 
 ```swift
-let result = Enumerable.repeat("a").take(5)
+let result = Enumerable.repeat$("a").take(5)
 > a, a, a, a, a
 
-let result = Enumerable.repeat("a", count: 3)
+let result = Enumerable.repeat$("a", count: 3)
 > a, a, a
 ```
 

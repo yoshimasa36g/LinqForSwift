@@ -31,7 +31,7 @@ class EnumerableAggregateSpec: QuickSpec {
                 }
                 it("is the specified function is used to select the result value") {
                     func accumulator(working: String, next: Book) -> String {
-                        return count(working) < count(next.title) ?  next.title : working
+                        return working.characters.count < next.title.characters.count ?  next.title : working
                     }
                     func resultSelector(working: String) -> String {
                         return working.uppercaseString

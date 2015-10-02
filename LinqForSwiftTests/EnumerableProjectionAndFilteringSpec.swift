@@ -19,7 +19,7 @@ class EnumerableProjectionAndFilteringSpec: QuickSpec {
                 it("is filters a sequence of values based on a predicate") {
                     let result: Enumerable<Book> = enumerableBooks.where$ { $0.publicationYear > 1900 }
                     expect(result.count()).to(equal(2))
-                    var generator: GeneratorOf<Book> = result.generate()
+                    let generator: AnyGenerator<Book> = result.generate()
                     let first: Book? = generator.next()
                     expect(first!.publicationYear).to(equal(1905))
                     let second: Book? = generator.next()
@@ -28,7 +28,7 @@ class EnumerableProjectionAndFilteringSpec: QuickSpec {
                 it("is each element's index is used in the logic of the predicate function") {
                     let result: Enumerable<Book> = enumerableBooks.where$ { $1 % 2 == 1 }
                     expect(result.count()).to(equal(2))
-                    var generator: GeneratorOf<Book> = result.generate()
+                    let generator:AnyGenerator<Book> = result.generate()
                     let first: Book? = generator.next()
                     expect(first!.publicationYear).to(equal(1905))
                     let second: Book? = generator.next()

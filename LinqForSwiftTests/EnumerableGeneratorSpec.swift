@@ -52,7 +52,7 @@ class EnumerableGeneratorSpec: QuickSpec {
     override func spec() {
         
         describe("Enumerable") {
-            let enumerableBooks: Enumerable<Book> = Enumerable.from(books)
+            let enumerableBooks: Enumerable<Book> = books.toEnumerable()
             
             describe("choice") {
                 it("is creates the infinite sequence from random elements of source sequence") {
@@ -75,7 +75,7 @@ class EnumerableGeneratorSpec: QuickSpec {
                 it(" is create empty Enumerable") {
                     let empty: Enumerable<Book> = Enumerable<Book>.empty()
                     var count: Int = 0
-                    for e in empty {
+                    for _ in empty {
                         count++
                     }
                     expect(count).to(equal(0))
@@ -150,12 +150,12 @@ class EnumerableGeneratorSpec: QuickSpec {
             
             describe("repeat") {
                 it("is generates an infinite sequence that contains one repeated value") {
-                    let result = Enumerable.repeat(magnus).take(5)
+                    let result = Enumerable.repeat$(magnus).take(5)
                     let expects = [magnus, magnus, magnus, magnus, magnus]
                     expect(result.sequenceEqual(expects) { $0.name == $1.name }).to(beTrue())
                 }
                 it("is generates a sequence that contains one repeated value") {
-                    let result = Enumerable.repeat(magnus, count: 5)
+                    let result = Enumerable.repeat$(magnus, count: 5)
                     let expects = [magnus, magnus, magnus, magnus, magnus]
                     expect(result.sequenceEqual(expects) { $0.name == $1.name }).to(beTrue())
                 }

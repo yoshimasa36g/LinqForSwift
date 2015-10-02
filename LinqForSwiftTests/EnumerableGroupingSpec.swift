@@ -19,7 +19,7 @@ class EnumerableGroupingSpec: QuickSpec {
                     let result: Enumerable<Grouping<Bool, Book>> = enumerableBooks.groupBy { $0.publicationYear > 1900 }
                     expect(result.count()).to(equal(2))
                     result.each { (group: Grouping<Bool, Book>) in
-                        var generator: GeneratorOf<Book> = group.elements.generate()
+                        let generator: AnyGenerator<Book> = group.elements.generate()
                         if group.key {
                             let first: Book? = generator.next()
                             expect(first!.publicationYear).to(equal(1905))
@@ -39,7 +39,7 @@ class EnumerableGroupingSpec: QuickSpec {
                     let result: Enumerable<Grouping<Bool, Int>> = enumerableBooks.groupBy({ $0.publicationYear > 1900 }) { $0.publicationYear }
                     expect(result.count()).to(equal(2))
                     result.each { (group: Grouping<Bool, Int>) in
-                        var generator: GeneratorOf<Int> = group.elements.generate()
+                        let generator: AnyGenerator<Int> = group.elements.generate()
                         if group.key {
                             let first: Int? = generator.next()
                             expect(first!).to(equal(1905))
