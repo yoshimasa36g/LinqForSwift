@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		764ECE479204B509ABC692A2 /* Pods_LinqForSwiftTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FCB3FC3F2DE1C983F78BDAC2 /* Pods_LinqForSwiftTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		D647D5961AF50E3D007B743F /* EnumerablePagingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D647D5951AF50E3D007B743F /* EnumerablePagingSpec.swift */; };
 		D64AE5B91AEA71AC0064DF1D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64AE5B81AEA71AC0064DF1D /* AppDelegate.swift */; };
 		D64AE5BC1AEA71AC0064DF1D /* LinqForSwift.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D64AE5BA1AEA71AC0064DF1D /* LinqForSwift.xcdatamodeld */; };
@@ -29,6 +28,7 @@
 		D68AE4661AEA746F002F9A33 /* EnumerableJoinSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68AE45E1AEA746F002F9A33 /* EnumerableJoinSpec.swift */; };
 		D68AE4681AEA746F002F9A33 /* EnumerableGeneratorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68AE4601AEA746F002F9A33 /* EnumerableGeneratorSpec.swift */; };
 		D68AE46A1AEA746F002F9A33 /* EnumerableSetSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68AE4621AEA746F002F9A33 /* EnumerableSetSpec.swift */; };
+		DCC7C2441D507C3B00773CC9 /* Pods_LinqForSwiftTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCC7C2431D507C3B00773CC9 /* Pods_LinqForSwiftTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,8 +42,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		386A9F265B038CA8AD5E4F52 /* Pods-LinqForSwiftTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinqForSwiftTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LinqForSwiftTests/Pods-LinqForSwiftTests.debug.xcconfig"; sourceTree = "<group>"; };
-		B983A16D5745E83152983CA0 /* Pods-LinqForSwiftTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinqForSwiftTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-LinqForSwiftTests/Pods-LinqForSwiftTests.release.xcconfig"; sourceTree = "<group>"; };
+		17E33E905DA139E01A2F82CF /* Pods_LinqForSwiftTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LinqForSwiftTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BED4000804AFAB1B44CB56E /* Pods-LinqForSwiftTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinqForSwiftTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LinqForSwiftTests/Pods-LinqForSwiftTests.debug.xcconfig"; sourceTree = "<group>"; };
+		A308C06CCAB1091B248D14FA /* Pods-LinqForSwiftTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinqForSwiftTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-LinqForSwiftTests/Pods-LinqForSwiftTests.release.xcconfig"; sourceTree = "<group>"; };
 		D647D5951AF50E3D007B743F /* EnumerablePagingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnumerablePagingSpec.swift; sourceTree = "<group>"; };
 		D64AE5B31AEA71AC0064DF1D /* LinqForSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LinqForSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D64AE5B71AEA71AC0064DF1D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -67,7 +68,9 @@
 		D68AE45E1AEA746F002F9A33 /* EnumerableJoinSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnumerableJoinSpec.swift; sourceTree = "<group>"; };
 		D68AE4601AEA746F002F9A33 /* EnumerableGeneratorSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnumerableGeneratorSpec.swift; sourceTree = "<group>"; };
 		D68AE4621AEA746F002F9A33 /* EnumerableSetSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnumerableSetSpec.swift; sourceTree = "<group>"; };
-		FCB3FC3F2DE1C983F78BDAC2 /* Pods_LinqForSwiftTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LinqForSwiftTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCC7C23E1D507A6100773CC9 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = "../../../Library/Developer/Xcode/DerivedData/LinqForSwift-duikbouqtplfwbadhgxpmwbarhjs/Build/Products/Debug-iphonesimulator/Nimble/Nimble.framework"; sourceTree = "<group>"; };
+		DCC7C2401D507A6800773CC9 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = "../../../Library/Developer/Xcode/DerivedData/LinqForSwift-duikbouqtplfwbadhgxpmwbarhjs/Build/Products/Debug-iphonesimulator/Quick/Quick.framework"; sourceTree = "<group>"; };
+		DCC7C2431D507C3B00773CC9 /* Pods_LinqForSwiftTests.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_LinqForSwiftTests.framework; path = "../../../Library/Developer/Xcode/DerivedData/LinqForSwift-duikbouqtplfwbadhgxpmwbarhjs/Build/Products/Debug-iphonesimulator/Pods_LinqForSwiftTests.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,26 +85,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				764ECE479204B509ABC692A2 /* Pods_LinqForSwiftTests.framework in Frameworks */,
+				DCC7C2441D507C3B00773CC9 /* Pods_LinqForSwiftTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AF7421320FE73A357592D416 /* Frameworks */ = {
+		3B743DAF1B399BE8CA48F04E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FCB3FC3F2DE1C983F78BDAC2 /* Pods_LinqForSwiftTests.framework */,
+				DCC7C2431D507C3B00773CC9 /* Pods_LinqForSwiftTests.framework */,
+				DCC7C2401D507A6800773CC9 /* Quick.framework */,
+				DCC7C23E1D507A6100773CC9 /* Nimble.framework */,
+				17E33E905DA139E01A2F82CF /* Pods_LinqForSwiftTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		B104F2BB3547945A152FCECB /* Pods */ = {
+		B2E46B98AAF809DFF72F92E3 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				386A9F265B038CA8AD5E4F52 /* Pods-LinqForSwiftTests.debug.xcconfig */,
-				B983A16D5745E83152983CA0 /* Pods-LinqForSwiftTests.release.xcconfig */,
+				8BED4000804AFAB1B44CB56E /* Pods-LinqForSwiftTests.debug.xcconfig */,
+				A308C06CCAB1091B248D14FA /* Pods-LinqForSwiftTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -113,8 +119,8 @@
 				D64AE5B51AEA71AC0064DF1D /* LinqForSwift */,
 				D64AE5CE1AEA71AC0064DF1D /* LinqForSwiftTests */,
 				D64AE5B41AEA71AC0064DF1D /* Products */,
-				B104F2BB3547945A152FCECB /* Pods */,
-				AF7421320FE73A357592D416 /* Frameworks */,
+				B2E46B98AAF809DFF72F92E3 /* Pods */,
+				3B743DAF1B399BE8CA48F04E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -195,6 +201,7 @@
 				D64AE5AF1AEA71AC0064DF1D /* Sources */,
 				D64AE5B01AEA71AC0064DF1D /* Frameworks */,
 				D64AE5B11AEA71AC0064DF1D /* Resources */,
+				DCC7C23D1D5066E500773CC9 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -209,12 +216,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D64AE5D81AEA71AC0064DF1D /* Build configuration list for PBXNativeTarget "LinqForSwiftTests" */;
 			buildPhases = (
-				9340342BDAC10B5A711A44DA /* Check Pods Manifest.lock */,
+				D3BFCB77490206AB39416C60 /* [CP] Check Pods Manifest.lock */,
 				D64AE5C71AEA71AC0064DF1D /* Sources */,
 				D64AE5C81AEA71AC0064DF1D /* Frameworks */,
 				D64AE5C91AEA71AC0064DF1D /* Resources */,
-				C4C3C850C4EDFDEE06F15E87 /* Embed Pods Frameworks */,
-				F7DBDC550726C98B1601EF67 /* Copy Pods Resources */,
+				32550DAFFA9CE21030743A4C /* [CP] Embed Pods Frameworks */,
+				9E1CAFF6FE59121822399B24 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -286,29 +293,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		9340342BDAC10B5A711A44DA /* Check Pods Manifest.lock */ = {
+		32550DAFFA9CE21030743A4C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		C4C3C850C4EDFDEE06F15E87 /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -316,20 +308,48 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LinqForSwiftTests/Pods-LinqForSwiftTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F7DBDC550726C98B1601EF67 /* Copy Pods Resources */ = {
+		9E1CAFF6FE59121822399B24 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LinqForSwiftTests/Pods-LinqForSwiftTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		D3BFCB77490206AB39416C60 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		DCC7C23D1D5066E500773CC9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# if which swiftlint >/dev/null; then\n#   swiftlint\n# else\n#   echo \"SwiftLint does not exist, download from https://github.com/realm/SwiftLint\"\n# fi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -502,19 +522,16 @@
 		};
 		D64AE5D91AEA71AC0064DF1D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 386A9F265B038CA8AD5E4F52 /* Pods-LinqForSwiftTests.debug.xcconfig */;
+			baseConfigurationReference = 8BED4000804AFAB1B44CB56E /* Pods-LinqForSwiftTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = LinqForSwiftTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "yoshimasa36g.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LinqForSwift.app/LinqForSwift";
@@ -523,15 +540,12 @@
 		};
 		D64AE5DA1AEA71AC0064DF1D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B983A16D5745E83152983CA0 /* Pods-LinqForSwiftTests.release.xcconfig */;
+			baseConfigurationReference = A308C06CCAB1091B248D14FA /* Pods-LinqForSwiftTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = LinqForSwiftTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "yoshimasa36g.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LinqForSwift.app/LinqForSwift";

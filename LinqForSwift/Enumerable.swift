@@ -32,7 +32,11 @@ public class Enumerable<T>: SequenceType {
 
     - parameter source: - A source sequence
     */
-    private init<TSequence: SequenceType where TSequence.Generator.Element == T>(_ source: TSequence) {
+    private init<TSequence: SequenceType
+        where TSequence.Generator.Element == T,
+            TSequence.SubSequence : SequenceType,
+            TSequence.SubSequence.Generator.Element == T,
+            TSequence.SubSequence.SubSequence == TSequence.SubSequence>(_ source: TSequence) {
         self.source = AnySequence(source)
     }
 
@@ -51,7 +55,7 @@ public class Enumerable<T>: SequenceType {
     {
         return Enumerable { () -> AnyGenerator<T> in
             var sourceArray = [T](source)
-            return anyGenerator { () -> T? in
+            return AnyGenerator { () -> T? in
                 return sourceArray[Int(arc4random_uniform(UInt32(sourceArray.count)))]
             }
         }
@@ -68,12 +72,13 @@ public class Enumerable<T>: SequenceType {
     {
         return Enumerable { () -> AnyGenerator<T> in
             var sourceArray = [T](source)
-            var index = 0
-            return anyGenerator { () -> T? in
+            var index = -1
+            return AnyGenerator { () -> T? in
+                index += 1
                 if sourceArray.count <= index {
                     index = 0
                 }
-                return sourceArray[index++]
+                return sourceArray[index]
             }
         }
     }
@@ -86,7 +91,7 @@ public class Enumerable<T>: SequenceType {
     */
     final class func empty() -> Enumerable {
         return Enumerable { () -> AnyGenerator<T> in
-            return anyGenerator { () -> T? in
+            return AnyGenerator { () -> T? in
                 return nil
             }
         }
@@ -98,7 +103,11 @@ public class Enumerable<T>: SequenceType {
     - parameter source: - A source sequence
     - returns: An enumerable sequence
     */
-    final class func from<TSequence: SequenceType where TSequence.Generator.Element == T>
+    final class func from<TSequence: SequenceType
+        where TSequence.Generator.Element == T,
+            TSequence.SubSequence : SequenceType,
+            TSequence.SubSequence.Generator.Element == T,
+            TSequence.SubSequence.SubSequence == TSequence.SubSequence>
         (source: TSequence) -> Enumerable
     {
         return Enumerable(source)
@@ -115,7 +124,7 @@ public class Enumerable<T>: SequenceType {
     final class func infinity<N: NumericType>(start: N, step: N = 1) -> Enumerable<N> {
         return Enumerable<N> { () -> AnyGenerator<N> in
             var value = start - step
-            return anyGenerator { () -> N? in
+            return AnyGenerator { () -> N? in
                 value += step
                 return value
             }
@@ -133,7 +142,7 @@ public class Enumerable<T>: SequenceType {
     final class func negativeInfinity<N: NumericType>(start: N, step: N = 1) -> Enumerable<N> {
         return Enumerable<N> { () -> AnyGenerator<N> in
             var value = start + step
-            return anyGenerator { () -> N? in
+            return AnyGenerator { () -> N? in
                 value -= step
                 return value
             }
@@ -198,7 +207,7 @@ public class Enumerable<T>: SequenceType {
     */
     final class func repeat$(value: T) -> Enumerable {
         return Enumerable { () -> AnyGenerator<T> in
-            return anyGenerator { () -> T? in
+            return AnyGenerator { () -> T? in
                 return value
             }
         }
@@ -237,7 +246,7 @@ public class Enumerable<T>: SequenceType {
     final func ofType<TResult>(resultType: TResult.Type) -> Enumerable<TResult> {
         return Enumerable<TResult> { () -> AnyGenerator<TResult> in
             let generator = self.generate()
-            return anyGenerator {
+            return AnyGenerator {
                 while let element = generator.next() {
                     if let resultTypeValue = element as? TResult {
                         return resultTypeValue
@@ -312,10 +321,11 @@ public class Enumerable<T>: SequenceType {
     final func select<TResult>(selector: (T, Int) -> TResult) -> Enumerable<TResult> {
         return Enumerable<TResult> { () -> AnyGenerator<TResult> in
             let generator = self.generate()
-            var index = 0
-            return anyGenerator {
+            var index = -1
+            return AnyGenerator {
                 while let element = generator.next() {
-                    return selector(element, index++)
+                    index += 1
+                    return selector(element, index)
                 }
                 return nil
             }
@@ -329,7 +339,11 @@ public class Enumerable<T>: SequenceType {
     - parameter collectionSelector: - A transform function to apply to each element
     - returns: An Enumerable<T> whose elements are the result of invoking the one-to-many transform function on each element of the input sequence
     */
-    final func selectMany<TCollection: SequenceType>
+    final func selectMany<TCollection: SequenceType, Element
+        where TCollection.Generator.Element == Element,
+            TCollection.SubSequence : SequenceType,
+            TCollection.SubSequence.Generator.Element == Element,
+            TCollection.SubSequence.SubSequence == TCollection.SubSequence>
         (collectionSelector: T -> TCollection) -> Enumerable<TCollection.Generator.Element>
     {
         return self.selectMany({ (x, _) -> TCollection in collectionSelector(x) }, resultSelector: { (_, x) in x } )
@@ -343,7 +357,11 @@ public class Enumerable<T>: SequenceType {
     - parameter collectionSelector: - A transform function to apply to each source element; the second parameter of the function represents the index of the source element
     - returns: An Enumerable<T> whose elements are the result of invoking the one-to-many transform function on each element of the input sequence
     */
-    final func selectMany<TCollection: SequenceType>
+    final func selectMany<TCollection: SequenceType, Element
+        where TCollection.Generator.Element == Element,
+            TCollection.SubSequence : SequenceType,
+            TCollection.SubSequence.Generator.Element == Element,
+            TCollection.SubSequence.SubSequence == TCollection.SubSequence>
         (collectionSelector: (T, Int) -> TCollection) -> Enumerable<TCollection.Generator.Element>
     {
         return self.selectMany(collectionSelector, resultSelector: { (_, x) in x } )
@@ -358,7 +376,11 @@ public class Enumerable<T>: SequenceType {
     - parameter resultSelector: - A transform function to apply to each element of the intermediate sequence
     - returns: An Enumerable<T> whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of source and then mapping each of those sequence elements and their corresponding source element to a result element
     */
-    final func selectMany<TCollection: SequenceType, TResult>(
+    final func selectMany<TCollection: SequenceType, Element, TResult
+        where TCollection.Generator.Element == Element,
+            TCollection.SubSequence : SequenceType,
+            TCollection.SubSequence.Generator.Element == Element,
+            TCollection.SubSequence.SubSequence == TCollection.SubSequence>(
         collectionSelector: T -> TCollection,
         resultSelector: (T, TCollection.Generator.Element) -> TResult
         ) -> Enumerable<TResult>
@@ -376,19 +398,23 @@ public class Enumerable<T>: SequenceType {
     - parameter resultSelector: - A transform function to apply to each element of the intermediate sequence
     - returns: An Enumerable<T> whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of source and then mapping each of those sequence elements and their corresponding source element to a result element
     */
-    final func selectMany<TCollection: SequenceType, TResult>(
+    final func selectMany<TCollection: SequenceType, Element, TResult
+        where TCollection.Generator.Element == Element,
+            TCollection.SubSequence : SequenceType,
+            TCollection.SubSequence.Generator.Element == Element,
+            TCollection.SubSequence.SubSequence == TCollection.SubSequence>(
         collectionSelector: (T, Int) -> TCollection,
         resultSelector: (T, TCollection.Generator.Element) -> TResult
         ) -> Enumerable<TResult>
     {
         return Enumerable<TResult> { () -> AnyGenerator<TResult> in
             typealias TElement = TCollection.Generator.Element
-            var index = 0
+            var index = -1
             let generator = self.generate()
             var middleGenerator: AnySequence<TElement>.Generator? = nil
             var element: T? = nil
 
-            return anyGenerator {
+            return AnyGenerator {
                 if middleGenerator == nil {
                     if let first = generator.next() {
                         element = first
@@ -399,7 +425,8 @@ public class Enumerable<T>: SequenceType {
                 repeat {
                     if (middleGenerator == nil)
                     {
-                        let middleSequence = collectionSelector(element!, index++);
+                        index += 1
+                        let middleSequence = collectionSelector(element!, index);
                         middleGenerator = Enumerable<TElement>.from(middleSequence).generate();
                     }
                     if let middleElement = middleGenerator?.next()
@@ -434,10 +461,11 @@ public class Enumerable<T>: SequenceType {
     func where$(predicate: (T, Int) -> Bool) -> Enumerable {
         return Enumerable { () -> AnyGenerator<T> in
             let generator = self.generate()
-            var index = 0
-            return anyGenerator {
+            var index = -1
+            return AnyGenerator {
                 while let element = generator.next() {
-                    if predicate(element, index++) {
+                    index += 1
+                    if predicate(element, index) {
                         return element
                     }
                 }
@@ -462,7 +490,7 @@ public class Enumerable<T>: SequenceType {
         return Enumerable<TResult> { () -> AnyGenerator<TResult> in
             let firstGenerator = self.generate()
             var secondGenerator = second.generate()
-            return anyGenerator {
+            return AnyGenerator {
                 switch (firstGenerator.next(), secondGenerator.next()) {
                 case (.Some(let first), .Some(let second)):
                     return resultSelector(first, second)
@@ -497,7 +525,7 @@ public class Enumerable<T>: SequenceType {
             let innerGroups = self.sequenceToGroupDictionary(inner, keySelector: innerKeySelector)
             let outerGenerator = self.generate()
 
-            return anyGenerator {
+            return AnyGenerator {
                 if let element = outerGenerator.next() {
                     let key = outerKeySelector(element)
                     if let group = innerGroups[key] {
@@ -535,7 +563,7 @@ public class Enumerable<T>: SequenceType {
             var outerElement: T? = nil
             var innerGenerator = Array<TInner.Generator.Element>().generate()
 
-            return anyGenerator {
+            return AnyGenerator {
                 while let element = innerGenerator.next() {
                     return resultSelector(outerElement!, element)
                 }
@@ -610,7 +638,7 @@ public class Enumerable<T>: SequenceType {
         return Enumerable { () -> AnyGenerator<T> in
             let firstGenerator = self.generate()
             var secondGenerator = second.generate()
-            return anyGenerator {
+            return AnyGenerator {
                 if let f = firstGenerator.next() {
                     return f
                 }
@@ -648,7 +676,7 @@ public class Enumerable<T>: SequenceType {
         return Enumerable { () -> AnyGenerator<T> in
             let generator = self.generate()
             var isFirst = true
-            return anyGenerator {
+            return AnyGenerator {
                 while let element = generator.next() {
                     isFirst = false
                     return element
@@ -691,14 +719,18 @@ public class Enumerable<T>: SequenceType {
     - parameter keySelector: - A function to generate the keys to compare
     - returns: A sequence that contains the set difference of the elements of two sequences
     */
-    final func except<TKey: Hashable, TSequence: SequenceType where TSequence.Generator.Element == T>
+    final func except<TKey: Hashable, TSequence: SequenceType
+        where TSequence.Generator.Element == T,
+            TSequence.SubSequence : SequenceType,
+            TSequence.SubSequence.Generator.Element == T,
+            TSequence.SubSequence.SubSequence == TSequence.SubSequence>
         (second: TSequence, keySelector: T -> TKey) -> Enumerable
     {
         return Enumerable { () -> AnyGenerator<T> in
             let firstGenerator = self.generate()
             var returnedElements = [TKey:Bool]()
             Enumerable.from(second).each { returnedElements[keySelector($0)] = true }
-            return anyGenerator {
+            return AnyGenerator {
                 while let element = firstGenerator.next() {
                     let key = keySelector(element)
                     if let _ = returnedElements[key] {
@@ -725,7 +757,7 @@ public class Enumerable<T>: SequenceType {
         return Enumerable { () -> AnyGenerator<T> in
             let firstGenerator = self.generate()
             var returnedElements = [T](second)
-            return anyGenerator {
+            return AnyGenerator {
                 let returned = Enumerable.from(returnedElements)
                 while let element = firstGenerator.next() {
                     if !returned.contains(element, comparer: comparer) {
@@ -745,14 +777,18 @@ public class Enumerable<T>: SequenceType {
     - parameter keySelector: - A function to generate the keys to compare
     - returns: A sequence that contains the elements that form the set intersection of two sequences
     */
-    final func intersect<TKey: Hashable, TSecond: SequenceType where TSecond.Generator.Element == T>
+    final func intersect<TKey: Hashable, TSecond: SequenceType
+        where TSecond.Generator.Element == T,
+            TSecond.SubSequence : SequenceType,
+            TSecond.SubSequence.Generator.Element == T,
+            TSecond.SubSequence.SubSequence == TSecond.SubSequence>
         (second: TSecond, keySelector: T -> TKey) -> Enumerable<T>
     {
         return Enumerable { () -> AnyGenerator<T> in
             let first = self.generate()
             var returnedElements = [TKey:Bool]()
             let secondDictionary = Enumerable.from(second).toDictionary(keySelector)
-            return anyGenerator {
+            return AnyGenerator {
                 while let element = first.next() {
                     let key = keySelector(element)
                     if let _ = returnedElements[key] {
@@ -775,14 +811,18 @@ public class Enumerable<T>: SequenceType {
     - parameter comparer: - An equality comparer to compare values
     - returns: A sequence that contains the elements that form the set intersection of two sequences
     */
-    final func intersect<TSecond: SequenceType where TSecond.Generator.Element == T>
+    final func intersect<TSecond: SequenceType
+        where TSecond.Generator.Element == T,
+            TSecond.SubSequence : SequenceType,
+            TSecond.SubSequence.Generator.Element == T,
+            TSecond.SubSequence.SubSequence == TSecond.SubSequence>
         (second: TSecond, comparer: (T, T) -> Bool) -> Enumerable<T>
     {
         return Enumerable { () -> AnyGenerator<T> in
             let firstGenerator = self.distinct(comparer).generate()
             let secondEnumerable = Enumerable.from(second)
             var returnedElements = [T]()
-            return anyGenerator {
+            return AnyGenerator {
                 let returned = Enumerable.from(returnedElements)
                 while let element = firstGenerator.next() {
                     if !returned.contains(element, comparer: comparer)
@@ -838,7 +878,7 @@ public class Enumerable<T>: SequenceType {
             var secondGenerator: TSequence.Generator? = nil
             var returnedElements = [T]()
 
-            return anyGenerator {
+            return AnyGenerator {
                 let returned = Enumerable.from(returnedElements)
                 if secondGenerator == nil {
                     while let firstElement = firstGenerator.next() {
@@ -875,7 +915,7 @@ public class Enumerable<T>: SequenceType {
             var secondGenerator: TSequence.Generator? = nil
             var returnedElements = [TKey:Bool]()
 
-            return anyGenerator {
+            return AnyGenerator {
                 if secondGenerator == nil {
                     while let firstElement = firstGenerator.next() {
                         let key = keySelector(firstElement)
@@ -964,7 +1004,7 @@ public class Enumerable<T>: SequenceType {
             let groups = self.sequenceToGroupDictionary(self, keySelector: keySelector)
             var keysGenerator = groups.keys.generate()
 
-            return anyGenerator {
+            return AnyGenerator {
                 if let key = keysGenerator.next() {
                     let elements = Enumerable.from(groups[key]!).select(elementSelector)
                     return Grouping(key: key, elements: elements)
@@ -990,7 +1030,7 @@ public class Enumerable<T>: SequenceType {
             let groups = self.sequenceToGroupDictionary(self, keySelector: keySelector)
             var keysGenerator = groups.keys.generate()
 
-            return anyGenerator {
+            return AnyGenerator {
                 if let key = keysGenerator.next() {
                     return resultSelector(key, Enumerable.from(groups[key]!))
                 } else {
@@ -1020,7 +1060,7 @@ public class Enumerable<T>: SequenceType {
             let groups = self.sequenceToGroupDictionary(self, keySelector: keySelector)
             var keysGenerator = groups.keys.generate()
 
-            return anyGenerator {
+            return AnyGenerator {
                 if let key = keysGenerator.next() {
                     return resultSelector(key, Enumerable.from(groups[key]!).select(elementSelector))
                 } else {
@@ -1398,12 +1438,13 @@ public class Enumerable<T>: SequenceType {
     final func skipWhile(predicate: (T, Int) -> Bool) -> Enumerable {
         return Enumerable { () -> AnyGenerator<T> in
             let generator = self.generate()
-            var index = 0
+            var index = -1
             var isSkipEnd = false
-            return anyGenerator {
+            return AnyGenerator {
                 while !isSkipEnd {
                     if let element = generator.next() {
-                        if !predicate(element, index++) {
+                        index += 1
+                        if !predicate(element, index) {
                             isSkipEnd = true
                             return element
                         }
@@ -1426,11 +1467,11 @@ public class Enumerable<T>: SequenceType {
         return Enumerable { () -> AnyGenerator<T> in
             let generator = self.generate()
             var index = 0
-            return anyGenerator {
+            return AnyGenerator {
                 if count <= index {
                     return nil
                 }
-                index++
+                index += 1
                 return generator.next()
             }
         }
@@ -1456,10 +1497,11 @@ public class Enumerable<T>: SequenceType {
     final func takeWhile(predicate: (T, Int) -> Bool) -> Enumerable {
         return Enumerable { () -> AnyGenerator<T> in
             let generator = self.generate()
-            var index = 0
-            return anyGenerator {
+            var index = -1
+            return AnyGenerator {
                 while let element = generator.next() {
-                    if !predicate(element, index++) {
+                    index += 1
+                    if !predicate(element, index) {
                         return nil
                     }
                     return element
@@ -1561,9 +1603,10 @@ public class Enumerable<T>: SequenceType {
     - parameter action: - A function to perform on each element of the source sequence; the second parameter of the function represents the index of the source element
     */
     final func each(action: (T, Int) -> Void) {
-        var index = 0
+        var index = -1
         for element in self {
-            action(element, index++)
+            index += 1
+            action(element, index)
         }
     }
 
@@ -1589,7 +1632,7 @@ public class Enumerable<T>: SequenceType {
     final func dump() -> Enumerable {
         return Enumerable { () -> AnyGenerator<T> in
             let generator = self.generate()
-            return anyGenerator {
+            return AnyGenerator {
                 if let element = generator.next() {
                     Swift.dump(element)
                     return element
@@ -1607,7 +1650,7 @@ public class Enumerable<T>: SequenceType {
     final func print() -> Enumerable {
         return Enumerable { () -> AnyGenerator<T> in
             let generator = self.generate()
-            return anyGenerator {
+            return AnyGenerator {
                 if let element = generator.next() {
                     Swift.print(element, terminator: "")
                     return element
@@ -1626,7 +1669,7 @@ public class Enumerable<T>: SequenceType {
     final func print(formatter: T -> String) -> Enumerable {
         return Enumerable { () -> AnyGenerator<T> in
             let generator = self.generate()
-            return anyGenerator {
+            return AnyGenerator {
                 if let element = generator.next() {
                     Swift.print(formatter(element), terminator: "")
                     return element
@@ -1644,7 +1687,7 @@ public class Enumerable<T>: SequenceType {
     final func println() -> Enumerable {
         return Enumerable { () -> AnyGenerator<T> in
             let generator = self.generate()
-            return anyGenerator {
+            return AnyGenerator {
                 if let element = generator.next() {
                     Swift.print(element)
                     return element
@@ -1663,7 +1706,7 @@ public class Enumerable<T>: SequenceType {
     final func println(formatter: T -> String) -> Enumerable {
         return Enumerable { () -> AnyGenerator<T> in
             let generator = self.generate()
-            return anyGenerator {
+            return AnyGenerator {
                 if let element = generator.next() {
                     Swift.print(formatter(element))
                     return element
@@ -1692,7 +1735,7 @@ public class Enumerable<T>: SequenceType {
                 value = x
                 break
             }
-            i++
+            i += 1
         }
         return value
     }
@@ -1727,7 +1770,7 @@ public class Enumerable<T>: SequenceType {
             return Enumerable<TResult> { () -> AnyGenerator<TResult> in
                 let generator = self.generate()
                 var working: TAccumulate? = nil
-                return anyGenerator {
+                return AnyGenerator {
                     if working == nil {
                         if seed == nil {
                             working = generator.next() as? TAccumulate
@@ -1918,15 +1961,23 @@ public class OrderedEnumerable<T> : Enumerable<T> {
             }
             return false
         }
-        return anyGenerator(array.generate())
+        return AnyGenerator(array.generate())
     }
 
-    public init<S: SequenceType where S.Generator.Element == T>(source: S, comparer: (T, T) -> Bool) {
+    public init<S: SequenceType
+        where S.Generator.Element == T,
+            S.SubSequence : SequenceType,
+            S.SubSequence.Generator.Element == T,
+            S.SubSequence.SubSequence == S.SubSequence>(source: S, comparer: (T, T) -> Bool) {
         self.comparers = [comparer]
         super.init(source)
     }
 
-    public init<S: SequenceType where S.Generator.Element == T>(source: S, comparers: Array<(T, T) -> Bool>) {
+    public init<S: SequenceType
+        where S.Generator.Element == T,
+            S.SubSequence : SequenceType,
+            S.SubSequence.Generator.Element == T,
+            S.SubSequence.SubSequence == S.SubSequence>(source: S, comparers: Array<(T, T) -> Bool>) {
         self.comparers = comparers
         super.init(source)
     }
@@ -1979,7 +2030,10 @@ public class OrderedEnumerable<T> : Enumerable<T> {
     }
 }
 
-public extension SequenceType {
+public extension SequenceType
+    where Self.SubSequence: SequenceType,
+        Self.SubSequence.Generator.Element == Self.Generator.Element,
+        Self.SubSequence.SubSequence == Self.SubSequence {
     public func toEnumerable() -> Enumerable<Self.Generator.Element> {
         return Enumerable.from(self)
     }

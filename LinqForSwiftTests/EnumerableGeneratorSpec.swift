@@ -76,7 +76,7 @@ class EnumerableGeneratorSpec: QuickSpec {
                     let empty: Enumerable<Book> = Enumerable<Book>.empty()
                     var count: Int = 0
                     for _ in empty {
-                        count++
+                        count += 1
                     }
                     expect(count).to(equal(0))
                 }
