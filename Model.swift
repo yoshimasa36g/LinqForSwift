@@ -9,9 +9,9 @@
 import Foundation
 import CoreData
 
-public class Model: NSManagedObject {
+open class Model: NSManagedObject {
 
-    @NSManaged public var someString: String
-    @NSManaged public var someInt: NSNumber
+    @NSManaged open var someString: String
+    @NSManaged open var someInt: NSNumber
 
 }

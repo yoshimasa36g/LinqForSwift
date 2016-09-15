@@ -13,7 +13,6 @@ I recommend you use the [slazyk/SINQ](https://github.com/slazyk/SINQ), if there 
 
 * All types that implemented SequneceType protocol
     * Array, Dictionary, and more...
-* NSManagedObject (CoreData)
 
 ## Examples
 
@@ -63,38 +62,11 @@ for other in result2[.other] {
 }
 ```
 
-### CoreDataSet
-
-```swift
-class Person: NSManagedObject {
-    @NSManaged var name: String
-    @NSManaged var age: NSNumber
-    @NSManaged var gender: NSNumber
-}
-
-enum Gender: Int {
-    case male = 1, female, other
-}
-
-let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-
-let people = CoreDataSet<Person>(appDelegate.managedObjectContext!)
-
-// get youngest 5 people of male of 20s
-let result = people.where$(format: "%d <= %K", 20, "age")
-                    .where$(format: "%K < %d", "age", 30)
-                    .where$(format: "%K == %d", "gender", Gender.male.rawValue)
-                    .orderBy("age")
-                    .take(5)
-                    .toArray()
-```
-
 ## Usage
 
 To use LINQ for Swift, simply copy these class file into your project folder.
 
 * Enumerable.swift
-* CoreDataSet.swift(optional)
 
 ## Enumerable <a name="enumerable" />
 
@@ -1537,107 +1509,3 @@ Enumerable.from(1...5).println { "from:\($0)" }
   from:5
 ```
 
----
-
-## CoreDataSet <a name="coredataset" />
-
-#### initializer
-
-Creates a CoreDataSet object.
-
-##### declaration
-
-```swift
-init(_ context: NSManagedObjectContext)
-```
-
-##### example
-
-```swift
-let models = CoreDataSet<Model>(appDelegate.managedObjectContext!)
-```
-
-#### orderBy
-
-Sorts the items of a entity in ascending order according to a key
-
-```swift
-public final func orderBy(fieldName: String) -> CoreDataSet
-
-public final func orderBy
-    (fieldName: String, comparator: NSComparator) -> CoreDataSet
-
-public final func orderBy
-    (fieldName: String, selector: Selector) -> CoreDataSet
-```
-
-#### orderByDescending
-
-Sorts the items of a entity in descending order according to a key.
-
-```swift
-public final func orderByDescending(fieldName: String) -> CoreDataSet
-
-public final func orderByDescending
-    (fieldName: String, comparator: NSComparator) -> CoreDataSet
-
-public final func orderByDescending
-    (fieldName: String, selector: Selector) -> CoreDataSet
-```
-
-#### skip
-
-Bypasses a specified number of items in a entity and then returns the remaining elements.
-
-```swift
-public final func skip(count: Int) -> CoreDataSet
-```
-
-#### take
-
-Returns a specified number of contiguous items from the start of a entity.
-
-```swift
-public final func take(count: Int) -> CoreDataSet
-```
-
-#### toArray
-
-Execute fetch request and convert result to Array<T>.
-
-```swift
-public final func toArray() -> [T]
-```
-
-#### toEnumerable
-
-Execute fetch request and convert result to Enumerable<T>.
-
-```swift
-public final func toEnumerable() -> Enumerable<T>
-```
-
-#### where$
-
-Filters a entity of values based on a NSPredicate.
-
-```swift
-public final func where$
-    (format predicateFormat: String, _ args: CVarArgType...) -> CoreDataSet
-
-public final func where$(
-    format predicateFormat: String,
-    argumentArray arguments: [AnyObject]?
-    ) -> CoreDataSet
-
-public final func where$(
-    format predicateFormat: String,
-    arguments argList: CVaListPointer
-    ) -> CoreDataSet
-
-public final func where$(value: Bool) -> CoreDataSet
-
-public final func Where(
-    block: (AnyObject!, [NSObject : AnyObject]!) -> Bool
-    ) -> CoreDataSet
-```
