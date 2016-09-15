@@ -459,7 +459,7 @@ public class Enumerable<T>: Sequence {
     - returns: An Enumerable<T> that contains elements from the input sequence that satisfy the condition
     */
     public func where$(_ predicate: @escaping (T, Int) -> Bool) -> Enumerable {
-        return Enumerable { [unowned self] () -> AnyIterator<T> in
+        return Enumerable { () -> AnyIterator<T> in
             let generator = self.makeIterator()
             var index = -1
             return AnyIterator {
@@ -557,7 +557,7 @@ public class Enumerable<T>: Sequence {
         resultSelector: @escaping (T, TInner.Iterator.Element) -> TResult
         ) -> Enumerable<TResult>
     {
-        return Enumerable<TResult> { [unowned self] () -> AnyIterator<TResult> in
+        return Enumerable<TResult> { () -> AnyIterator<TResult> in
             let innerGroups = self.sequenceToGroupDictionary(inner, keySelector: innerKeySelector)
             let outerGenerator = self.makeIterator()
             var outerElement: T? = nil
@@ -635,7 +635,7 @@ public class Enumerable<T>: Sequence {
     public func concat<TSequence: Sequence>
         (_ second: TSequence) -> Enumerable where TSequence.Iterator.Element == T
     {
-        return Enumerable { [unowned self] () -> AnyIterator<T> in
+        return Enumerable { () -> AnyIterator<T> in
             let firstGenerator = self.makeIterator()
             var secondGenerator = second.makeIterator()
             return AnyIterator {
@@ -673,7 +673,7 @@ public class Enumerable<T>: Sequence {
     - returns: An Enumerable<T> that contains defaultValue if source is empty; otherwise, source
     */
     public func defaultIfEmpty(_ defaultValue: T) -> Enumerable {
-        return Enumerable { [unowned self] () -> AnyIterator<T> in
+        return Enumerable { () -> AnyIterator<T> in
             let generator = self.makeIterator()
             var isFirst = true
             return AnyIterator {
@@ -726,7 +726,7 @@ public class Enumerable<T>: Sequence {
             TSequence.SubSequence.Iterator.Element == T,
             TSequence.SubSequence.SubSequence == TSequence.SubSequence
     {
-        return Enumerable { [unowned self] () -> AnyIterator<T> in
+        return Enumerable { () -> AnyIterator<T> in
             let firstGenerator = self.makeIterator()
             var returnedElements = [TKey:Bool]()
             Enumerable.from(second).each { returnedElements[keySelector($0)] = true }
@@ -754,7 +754,7 @@ public class Enumerable<T>: Sequence {
     public func except<TSequence: Sequence>
         (_ second: TSequence, comparer: @escaping (T, T) -> Bool) -> Enumerable where TSequence.Iterator.Element == T
     {
-        return Enumerable { [unowned self] () -> AnyIterator<T> in
+        return Enumerable { () -> AnyIterator<T> in
             let firstGenerator = self.makeIterator()
             var returnedElements = [T](second)
             return AnyIterator {
@@ -784,7 +784,7 @@ public class Enumerable<T>: Sequence {
             TSecond.SubSequence.Iterator.Element == T,
             TSecond.SubSequence.SubSequence == TSecond.SubSequence
     {
-        return Enumerable { [unowned self] () -> AnyIterator<T> in
+        return Enumerable { () -> AnyIterator<T> in
             let first = self.makeIterator()
             var returnedElements = [TKey:Bool]()
             let secondDictionary = Enumerable.from(second).toDictionary(keySelector)
@@ -818,7 +818,7 @@ public class Enumerable<T>: Sequence {
             TSecond.SubSequence.Iterator.Element == T,
             TSecond.SubSequence.SubSequence == TSecond.SubSequence
     {
-        return Enumerable { [unowned self] () -> AnyIterator<T> in
+        return Enumerable { () -> AnyIterator<T> in
             let firstGenerator = self.distinct(comparer).makeIterator()
             let secondEnumerable = Enumerable.from(second)
             var returnedElements = [T]()
@@ -873,7 +873,7 @@ public class Enumerable<T>: Sequence {
     public func union<TSequence: Sequence>
         (_ second: TSequence, comparer: @escaping (T, T) -> Bool) -> Enumerable<T> where TSequence.Iterator.Element == T
     {
-        return Enumerable { [unowned self] () -> AnyIterator<T> in
+        return Enumerable { () -> AnyIterator<T> in
             let firstGenerator = self.makeIterator()
             var secondGenerator: TSequence.Iterator? = nil
             var returnedElements = [T]()
@@ -910,7 +910,7 @@ public class Enumerable<T>: Sequence {
     public func union<TKey: Hashable, TSequence: Sequence>
         (_ second: TSequence, keySelector: @escaping (T) -> TKey) -> Enumerable<T> where TSequence.Iterator.Element == T
     {
-        return Enumerable { [unowned self] () -> AnyIterator<T> in
+        return Enumerable { () -> AnyIterator<T> in
             let firstGenerator = self.makeIterator()
             var secondGenerator: TSequence.Iterator? = nil
             var returnedElements = [TKey:Bool]()
@@ -1026,7 +1026,7 @@ public class Enumerable<T>: Sequence {
     public func groupBy<TKey: Hashable, TResult>
         (_ keySelector: @escaping (T) -> TKey, resultSelector: @escaping (TKey, Enumerable<T>) -> TResult) -> Enumerable<TResult>
     {
-        return Enumerable<TResult> { [unowned self] () -> AnyIterator<TResult> in
+        return Enumerable<TResult> { () -> AnyIterator<TResult> in
             let groups = self.sequenceToGroupDictionary(self, keySelector: keySelector)
             var keysGenerator = groups.keys.makeIterator()
 
@@ -1056,7 +1056,7 @@ public class Enumerable<T>: Sequence {
         resultSelector: @escaping (TKey, Enumerable<TElement>) -> TResult
         ) -> Enumerable<TResult>
     {
-        return Enumerable<TResult> { [unowned self] () -> AnyIterator<TResult> in
+        return Enumerable<TResult> { () -> AnyIterator<TResult> in
             let groups = self.sequenceToGroupDictionary(self, keySelector: keySelector)
             var keysGenerator = groups.keys.makeIterator()
 
@@ -1436,7 +1436,7 @@ public class Enumerable<T>: Sequence {
     - returns: An IEnumerable<T> that contains the elements from the input sequence starting at the first element in the linear series that does not pass the test specified by predicate
     */
     public func skipWhile(_ predicate: @escaping (T, Int) -> Bool) -> Enumerable {
-        return Enumerable { [unowned self] () -> AnyIterator<T> in
+        return Enumerable { () -> AnyIterator<T> in
             let generator = self.makeIterator()
             var index = -1
             var isSkipEnd = false
@@ -1495,7 +1495,7 @@ public class Enumerable<T>: Sequence {
     - returns: An Enumerable<T> that contains elements from the input sequence that occur before the element at which the test no longer passes
     */
     public func takeWhile(_ predicate: @escaping (T, Int) -> Bool) -> Enumerable {
-        return Enumerable { [unowned self] () -> AnyIterator<T> in
+        return Enumerable { () -> AnyIterator<T> in
             let generator = self.makeIterator()
             var index = -1
             return AnyIterator {
@@ -1630,7 +1630,7 @@ public class Enumerable<T>: Sequence {
     - returns: The sequence
     */
     public func dump() -> Enumerable {
-        return Enumerable { [unowned self] () -> AnyIterator<T> in
+        return Enumerable { () -> AnyIterator<T> in
             let generator = self.makeIterator()
             return AnyIterator {
                 if let element = generator.next() {
@@ -1648,7 +1648,7 @@ public class Enumerable<T>: Sequence {
     - returns: The sequence
     */
     public func print() -> Enumerable {
-        return Enumerable { [unowned self] () -> AnyIterator<T> in
+        return Enumerable { () -> AnyIterator<T> in
             let generator = self.makeIterator()
             return AnyIterator {
                 if let element = generator.next() {
@@ -1685,7 +1685,7 @@ public class Enumerable<T>: Sequence {
     - returns: The sequence
     */
     public func println() -> Enumerable {
-        return Enumerable { [unowned self] () -> AnyIterator<T> in
+        return Enumerable { () -> AnyIterator<T> in
             let generator = self.makeIterator()
             return AnyIterator {
                 if let element = generator.next() {
@@ -1704,7 +1704,7 @@ public class Enumerable<T>: Sequence {
     - returns: The sequence
     */
     public func println(_ formatter: @escaping (T) -> String) -> Enumerable {
-        return Enumerable { [unowned self] () -> AnyIterator<T> in
+        return Enumerable { () -> AnyIterator<T> in
             let generator = self.makeIterator()
             return AnyIterator {
                 if let element = generator.next() {
@@ -1767,7 +1767,7 @@ public class Enumerable<T>: Sequence {
         accumulator: @escaping (TAccumulate, T) -> TAccumulate,
         resultSelector: @escaping (TAccumulate) -> TResult
         ) -> Enumerable<TResult> {
-            return Enumerable<TResult> { [unowned self] () -> AnyIterator<TResult> in
+            return Enumerable<TResult> { () -> AnyIterator<TResult> in
                 let generator = self.makeIterator()
                 var working: TAccumulate? = nil
                 return AnyIterator {
@@ -1950,7 +1950,7 @@ public class OrderedEnumerable<T> : Enumerable<T> {
     public override func makeIterator() -> AnyIterator<T> {
         var array = Enumerable.from(source).toArray()
         array.sort {
-            [unowned self] (a: T, b: T) in
+            (a: T, b: T) in
             for comparer in self.comparers {
                 if comparer(a, b) {
                     return true
