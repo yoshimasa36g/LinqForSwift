@@ -1,13 +1,10 @@
-LINQ for Swift
+Linq for Swift
 ========================================
 
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+![Swift>=3.0](https://img.shields.io/badge/Swift-%3E%3D3.0-brightgreen.svg)
+
 Linq for Swift is implemented some .NET Framework methods and some extra methods that is inspired by [linq.js](https://linqjs.codeplex.com/).
-
-This library is making to my learning of Swift and my personal use.  
-Without notice in advance, there is a possibility that the disruptive changes are added.
-
-Some methods of [slazyk/SINQ](https://github.com/slazyk/SINQ) and this library are duplicates.  
-I recommend you use the [slazyk/SINQ](https://github.com/slazyk/SINQ), if there is no need to use methods that have been implemented only in this library.
 
 ## Supported types
 
@@ -16,18 +13,11 @@ I recommend you use the [slazyk/SINQ](https://github.com/slazyk/SINQ), if there 
 
 ## Examples
 
-### Enumerable
-
 ```swift
-class Person {
-    var name: String
-    var age: Int
-    var gender: Gender
-    init(name: String, age: Int, gender: Gender) {
-        self.name = name
-        self.age = age
-        self.gender = gender
-    }
+struct Person {
+    let name: String
+    let age: Int
+    let gender: Gender
 }
 
 enum Gender {
@@ -50,23 +40,28 @@ let result2 = people.toEnumerable()
                         .toLookup { $0.gender }
 // males
 for male in result2[.male] {
-    println(male.name)
+    print(male.name)
 }
 // females
 for female in result2[.female] {
-    println(female.name)
+    print(female.name)
 }
 // others
 for other in result2[.other] {
-    println(other.name)
+    print(other.name)
 }
 ```
 
-## Usage
+## Installation and Setup
 
-To use LINQ for Swift, simply copy these class file into your project folder.
+To use Linq for Swift, simply copy `Enumerable.swift` into your project folder.
 
-* Enumerable.swift
+It also can be use by installing with Carthage.  
+Add to your Cartfile:
+
+```
+github "yoshimasa36g/LinqForSwift"
+```
 
 ## Enumerable <a name="enumerable" />
 
