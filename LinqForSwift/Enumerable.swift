@@ -10,13 +10,13 @@ import Foundation
 /**
 Provides a set of methods for querying objects
 */
-open class Enumerable<T>: Sequence {
+public class Enumerable<T>: Sequence {
 
     // sequence source
     fileprivate let source : AnySequence<T>
 
     // generator
-    open func makeIterator() -> AnyIterator<T> { return source.makeIterator() }
+    public func makeIterator() -> AnyIterator<T> { return source.makeIterator() }
 
     /**
     Initialize from generator.
@@ -50,7 +50,7 @@ open class Enumerable<T>: Sequence {
     - parameter source: - A source sequence
     :return: An infinite sequence from random elements of source sequence
     */
-    final class func choice<TSequence: Sequence>
+    public class func choice<TSequence: Sequence>
         (_ source: TSequence) -> Enumerable where TSequence.Iterator.Element == T
     {
         return Enumerable { () -> AnyIterator<T> in
@@ -67,7 +67,7 @@ open class Enumerable<T>: Sequence {
     - parameter source: - A source sequence
     :return: An infinite cycle sequence from source sequence
     */
-    final class func cycle<TSequence: Sequence>
+    public class func cycle<TSequence: Sequence>
         (_ source: TSequence) -> Enumerable where TSequence.Iterator.Element == T
     {
         return Enumerable { () -> AnyIterator<T> in
@@ -89,7 +89,7 @@ open class Enumerable<T>: Sequence {
 
     - returns: An empty Enumerable<T>
     */
-    final class func empty() -> Enumerable {
+    public class func empty() -> Enumerable {
         return Enumerable { () -> AnyIterator<T> in
             return AnyIterator { () -> T? in
                 return nil
@@ -103,7 +103,7 @@ open class Enumerable<T>: Sequence {
     - parameter source: - A source sequence
     - returns: An enumerable sequence
     */
-    final class func from<TSequence: Sequence>
+    public class func from<TSequence: Sequence>
         (_ source: TSequence) -> Enumerable
         where TSequence.Iterator.Element == T,
             TSequence.SubSequence : Sequence,
@@ -121,7 +121,7 @@ open class Enumerable<T>: Sequence {
     - parameter step: - The step value to increase
     - returns: A infinite sequence from specified start number and step value
     */
-    final class func infinity<N: NumericType>(_ start: N, step: N = 1) -> Enumerable<N> {
+    public class func infinity<N: NumericType>(_ start: N, step: N = 1) -> Enumerable<N> {
         return Enumerable<N> { () -> AnyIterator<N> in
             var value = start - step
             return AnyIterator { () -> N? in
@@ -139,7 +139,7 @@ open class Enumerable<T>: Sequence {
     - parameter step: - The step value to decrease
     - returns: A infinite sequence from specified start number and step value
     */
-    final class func negativeInfinity<N: NumericType>(_ start: N, step: N = 1) -> Enumerable<N> {
+    public class func negativeInfinity<N: NumericType>(_ start: N, step: N = 1) -> Enumerable<N> {
         return Enumerable<N> { () -> AnyIterator<N> in
             var value = start + step
             return AnyIterator { () -> N? in
@@ -157,7 +157,7 @@ open class Enumerable<T>: Sequence {
     - parameter count: - The number of sequential NumericType to generate
     - returns: An Enumerable<N> that contains a range of sequential integral numbers
     */
-    final class func range<N: NumericType>(_ start: N, count: Int) -> Enumerable<N> {
+    public class func range<N: NumericType>(_ start: N, count: Int) -> Enumerable<N> {
         return Enumerable<N>.infinity(start, step: 1).take(count)
     }
 
@@ -170,7 +170,7 @@ open class Enumerable<T>: Sequence {
     - parameter count: - The number of sequential NumericType to generate
     - returns: An Enumerable<N> that contains a range of sequential integral numbers
     */
-    final class func range<N: NumericType>(_ start: N, step: N, count: Int) -> Enumerable<N> {
+    public class func range<N: NumericType>(_ start: N, step: N, count: Int) -> Enumerable<N> {
         return Enumerable<N>.infinity(start, step: step).take(count)
     }
 
@@ -182,7 +182,7 @@ open class Enumerable<T>: Sequence {
     - parameter count: - The number of sequential NumericType to generate
     - returns: An Enumerable<N> that contains a range of sequential integral numbers
     */
-    final class func rangeDown<N: NumericType>(_ start: N, count: Int) -> Enumerable<N> {
+    public class func rangeDown<N: NumericType>(_ start: N, count: Int) -> Enumerable<N> {
         return Enumerable<N>.negativeInfinity(start, step: 1).take(count)
     }
 
@@ -195,7 +195,7 @@ open class Enumerable<T>: Sequence {
     - parameter count: - The number of sequential NumericType to generate
     - returns: An Enumerable<N> that contains a range of sequential integral numbers
     */
-    final class func rangeDown<N: NumericType>(_ start: N, step: N, count: Int) -> Enumerable<N> {
+    public class func rangeDown<N: NumericType>(_ start: N, step: N, count: Int) -> Enumerable<N> {
         return Enumerable<N>.negativeInfinity(start, step: step).take(count)
     }
 
@@ -205,7 +205,7 @@ open class Enumerable<T>: Sequence {
     - parameter value: - The value to be repeated
     - returns: An infinite sequence that contains one repeated value
     */
-    final class func repeat$(_ value: T) -> Enumerable {
+    public class func repeat$(_ value: T) -> Enumerable {
         return Enumerable { () -> AnyIterator<T> in
             return AnyIterator { () -> T? in
                 return value
@@ -220,7 +220,7 @@ open class Enumerable<T>: Sequence {
     - parameter count: - The number of times to repeat the value in the generated sequence
     - returns: A sequence that contains one repeated value
     */
-    final class func repeat$(_ value: T, count: Int) -> Enumerable {
+    public class func repeat$(_ value: T, count: Int) -> Enumerable {
         return Enumerable.repeat$(value).take(count)
     }
 
@@ -229,7 +229,7 @@ open class Enumerable<T>: Sequence {
 
     - parameter value: - The value of sequence
     */
-    final class func return$(_ value: T) -> Enumerable {
+    public class func return$(_ value: T) -> Enumerable {
         return Enumerable.repeat$(value).take(1)
     }
 
@@ -243,7 +243,7 @@ open class Enumerable<T>: Sequence {
     - parameter resultType: - The type to filter the elements of the sequence on
     - returns: An Enumerable that contains elements from the input sequence of type TResult
     */
-    final func ofType<TResult>(_ resultType: TResult.Type) -> Enumerable<TResult> {
+    public func ofType<TResult>(_ resultType: TResult.Type) -> Enumerable<TResult> {
         return Enumerable<TResult> { () -> AnyIterator<TResult> in
             let generator = self.makeIterator()
             return AnyIterator {
@@ -263,7 +263,7 @@ open class Enumerable<T>: Sequence {
     - parameter accumulator: - An accumulator function to be invoked on each element
     - returns: An Enumerable<T> that contains results of accumulator function
     */
-    final func scan(_ accumulator: @escaping (T, T) -> T) -> Enumerable {
+    public func scan(_ accumulator: @escaping (T, T) -> T) -> Enumerable {
         return self.scan(seed: nil, accumulator: accumulator) { $0 }
     }
 
@@ -275,7 +275,7 @@ open class Enumerable<T>: Sequence {
     - parameter accumulator: - An accumulator function to be invoked on each element
     - returns: An Enumerable<TAccumulate> that contains results of accumulator function
     */
-    final func scan<TAccumulate>(
+    public func scan<TAccumulate>(
         _ seed: TAccumulate,
         accumulator: @escaping (TAccumulate, T) -> TAccumulate
         ) -> Enumerable<TAccumulate>
@@ -293,7 +293,7 @@ open class Enumerable<T>: Sequence {
     - parameter resultSelector: - A function to transform the final accumulator value into the result value
     - returns: An Enumerable<T> that contains results of accumulator function
     */
-    final func scan<TAccumulate, TResult>(
+    public func scan<TAccumulate, TResult>(
         _ seed: TAccumulate,
         accumulator: @escaping (TAccumulate, T) -> TAccumulate,
         resultSelector: @escaping (TAccumulate) -> TResult
@@ -308,7 +308,7 @@ open class Enumerable<T>: Sequence {
     - parameter selector: - A transform function to apply to each element
     - returns: An Enumerable<T> whose elements are the result of invoking the transform function on each element of source
     */
-    final func select<TResult>(_ selector: @escaping (T) -> TResult) -> Enumerable<TResult> {
+    public func select<TResult>(_ selector: @escaping (T) -> TResult) -> Enumerable<TResult> {
         return self.select { (x, _) -> TResult in selector(x) }
     }
 
@@ -318,7 +318,7 @@ open class Enumerable<T>: Sequence {
     - parameter selector: - A transform function to apply to each source element; the second parameter of the function represents the index of the source element
     - returns: An Enumerable<T> whose elements are the result of invoking the transform function on each element of source
     */
-    final func select<TResult>(_ selector: @escaping (T, Int) -> TResult) -> Enumerable<TResult> {
+    public func select<TResult>(_ selector: @escaping (T, Int) -> TResult) -> Enumerable<TResult> {
         return Enumerable<TResult> { () -> AnyIterator<TResult> in
             let generator = self.makeIterator()
             var index = -1
@@ -339,7 +339,7 @@ open class Enumerable<T>: Sequence {
     - parameter collectionSelector: - A transform function to apply to each element
     - returns: An Enumerable<T> whose elements are the result of invoking the one-to-many transform function on each element of the input sequence
     */
-    final func selectMany<TCollection: Sequence, Element>
+    public func selectMany<TCollection: Sequence, Element>
         (_ collectionSelector: @escaping (T) -> TCollection) -> Enumerable<TCollection.Iterator.Element>
         where TCollection.Iterator.Element == Element,
             TCollection.SubSequence : Sequence,
@@ -357,7 +357,7 @@ open class Enumerable<T>: Sequence {
     - parameter collectionSelector: - A transform function to apply to each source element; the second parameter of the function represents the index of the source element
     - returns: An Enumerable<T> whose elements are the result of invoking the one-to-many transform function on each element of the input sequence
     */
-    final func selectMany<TCollection: Sequence, Element>
+    public func selectMany<TCollection: Sequence, Element>
         (_ collectionSelector: @escaping (T, Int) -> TCollection) -> Enumerable<TCollection.Iterator.Element>
         where TCollection.Iterator.Element == Element,
             TCollection.SubSequence : Sequence,
@@ -376,7 +376,7 @@ open class Enumerable<T>: Sequence {
     - parameter resultSelector: - A transform function to apply to each element of the intermediate sequence
     - returns: An Enumerable<T> whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of source and then mapping each of those sequence elements and their corresponding source element to a result element
     */
-    final func selectMany<TCollection: Sequence, Element, TResult>(
+    public func selectMany<TCollection: Sequence, Element, TResult>(
         _ collectionSelector: @escaping (T) -> TCollection,
         resultSelector: @escaping (T, TCollection.Iterator.Element) -> TResult
         ) -> Enumerable<TResult>
@@ -398,7 +398,7 @@ open class Enumerable<T>: Sequence {
     - parameter resultSelector: - A transform function to apply to each element of the intermediate sequence
     - returns: An Enumerable<T> whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of source and then mapping each of those sequence elements and their corresponding source element to a result element
     */
-    final func selectMany<TCollection: Sequence, Element, TResult>(
+    public func selectMany<TCollection: Sequence, Element, TResult>(
         _ collectionSelector: @escaping (T, Int) -> TCollection,
         resultSelector: @escaping (T, TCollection.Iterator.Element) -> TResult
         ) -> Enumerable<TResult>
@@ -447,7 +447,7 @@ open class Enumerable<T>: Sequence {
     - parameter predicate: - A function to test each element for a condition
     - returns: An Enumerable<T> that contains elements from the input sequence that satisfy the condition
     */
-    func where$(_ predicate: @escaping (T) -> Bool) -> Enumerable {
+    public func where$(_ predicate: @escaping (T) -> Bool) -> Enumerable {
         return self.where$ { (x, _) -> Bool in predicate(x) }
     }
 
@@ -458,7 +458,7 @@ open class Enumerable<T>: Sequence {
     - parameter predicate: - A function to test each element for a condition; the second parameter of the function represents the index of the source element
     - returns: An Enumerable<T> that contains elements from the input sequence that satisfy the condition
     */
-    func where$(_ predicate: @escaping (T, Int) -> Bool) -> Enumerable {
+    public func where$(_ predicate: @escaping (T, Int) -> Bool) -> Enumerable {
         return Enumerable { [unowned self] () -> AnyIterator<T> in
             let generator = self.makeIterator()
             var index = -1
@@ -482,7 +482,7 @@ open class Enumerable<T>: Sequence {
     - parameter resultSelector: - A function that specifies how to merge the elements from the two sequences
     - returns: An IEnumerable<TResult> that contains merged elements of two input sequences
     */
-    final func zip<TSequence: Sequence, TResult>(
+    public func zip<TSequence: Sequence, TResult>(
         _ second: TSequence,
         resultSelector: @escaping (T, TSequence.Iterator.Element) -> TResult
         ) -> Enumerable<TResult>
@@ -514,7 +514,7 @@ open class Enumerable<T>: Sequence {
     - parameter resultSelector: - A function to create a result element from an element from the first sequence and a collection of matching elements from the second sequence
     - returns: An Enumerable<TResult> that are obtained by performing a grouped join on two sequences
     */
-    final func groupJoin<TInner: Sequence, TKey: Hashable, TResult>(
+    public func groupJoin<TInner: Sequence, TKey: Hashable, TResult>(
         _ inner: TInner,
         outerKeySelector: @escaping (T) -> TKey,
         innerKeySelector: @escaping (TInner.Iterator.Element) -> TKey,
@@ -550,7 +550,7 @@ open class Enumerable<T>: Sequence {
     - parameter resultSelector: - A function to create a result element from two matching elements
     - returns: An Enumerable<T> that are obtained by performing an inner join on two sequences
     */
-    final func join<TInner: Sequence, TKey: Hashable, TResult>(
+    public func join<TInner: Sequence, TKey: Hashable, TResult>(
         _ inner: TInner,
         outerKeySelector: @escaping (T) -> TKey,
         innerKeySelector: @escaping (TInner.Iterator.Element) -> TKey,
@@ -590,7 +590,7 @@ open class Enumerable<T>: Sequence {
     - parameter predicate: - A function to test each element for a condition
     - returns: true if every element of the source sequence passes the test in the specified predicate, or if the sequence is empty; otherwise, false
     */
-    final func all(_ predicate: (T) -> Bool) -> Bool {
+    public func all(_ predicate: (T) -> Bool) -> Bool {
         for element in self {
             if !predicate(element) {
                 return false
@@ -604,7 +604,7 @@ open class Enumerable<T>: Sequence {
 
     - returns: true if the source sequence contains any elements; otherwise, false
     */
-    final func any() -> Bool {
+    public func any() -> Bool {
         for _ in self {
             return true
         }
@@ -617,7 +617,7 @@ open class Enumerable<T>: Sequence {
     - parameter predicate: - A function to test each element for a condition
     - returns: true if any elements in the source sequence pass the test in the specified predicate; otherwise, false
     */
-    final func any(_ predicate: (T) -> Bool) -> Bool {
+    public func any(_ predicate: (T) -> Bool) -> Bool {
         for element in self {
             if predicate(element) {
                 return true
@@ -632,7 +632,7 @@ open class Enumerable<T>: Sequence {
     - parameter second: - The sequence to concatenate to the first sequence
     - returns: An Enumerable<T> that contains the concatenated elements of the two input sequences
     */
-    final func concat<TSequence: Sequence>
+    public func concat<TSequence: Sequence>
         (_ second: TSequence) -> Enumerable where TSequence.Iterator.Element == T
     {
         return Enumerable { [unowned self] () -> AnyIterator<T> in
@@ -654,7 +654,7 @@ open class Enumerable<T>: Sequence {
     - parameter comparer: - An equality comparer to compare values
     - returns: true if the source sequence contains an element that has the specified value; otherwise, false
     */
-    final func contains(_ value: T, comparer: (T, T) -> Bool) -> Bool {
+    public func contains(_ value: T, comparer: (T, T) -> Bool) -> Bool {
         let generator = self.makeIterator()
         while let element = generator.next() {
             if comparer(value, element) {
@@ -672,7 +672,7 @@ open class Enumerable<T>: Sequence {
     - parameter defaultValue: - The value to return if the sequence is empty
     - returns: An Enumerable<T> that contains defaultValue if source is empty; otherwise, source
     */
-    final func defaultIfEmpty(_ defaultValue: T) -> Enumerable {
+    public func defaultIfEmpty(_ defaultValue: T) -> Enumerable {
         return Enumerable { [unowned self] () -> AnyIterator<T> in
             let generator = self.makeIterator()
             var isFirst = true
@@ -696,7 +696,7 @@ open class Enumerable<T>: Sequence {
     - parameter keySelector: - A function to generate the keys to compare
     - returns: An Enumerable<T> that contains distinct elements from the source sequence
     */
-    final func distinct<TKey: Hashable>(_ keySelector: @escaping (T) -> TKey) -> Enumerable
+    public func distinct<TKey: Hashable>(_ keySelector: @escaping (T) -> TKey) -> Enumerable
     {
         return self.except(Enumerable<T>.empty(), keySelector: keySelector)
     }
@@ -707,7 +707,7 @@ open class Enumerable<T>: Sequence {
     - parameter comparer: - An equality comparer to compare values
     - returns: An Enumerable<T> that contains distinct elements from the source sequence
     */
-    final func distinct(_ comparer: @escaping (T, T) -> Bool) -> Enumerable
+    public func distinct(_ comparer: @escaping (T, T) -> Bool) -> Enumerable
     {
         return self.except(Enumerable<T>.empty(), comparer: comparer)
     }
@@ -719,7 +719,7 @@ open class Enumerable<T>: Sequence {
     - parameter keySelector: - A function to generate the keys to compare
     - returns: A sequence that contains the set difference of the elements of two sequences
     */
-    final func except<TKey: Hashable, TSequence: Sequence>
+    public func except<TKey: Hashable, TSequence: Sequence>
         (_ second: TSequence, keySelector: @escaping (T) -> TKey) -> Enumerable
         where TSequence.Iterator.Element == T,
             TSequence.SubSequence : Sequence,
@@ -751,7 +751,7 @@ open class Enumerable<T>: Sequence {
     - parameter comparer: - An equality comparer to compare values
     - returns: A sequence that contains the set difference of the elements of two sequences
     */
-    final func except<TSequence: Sequence>
+    public func except<TSequence: Sequence>
         (_ second: TSequence, comparer: @escaping (T, T) -> Bool) -> Enumerable where TSequence.Iterator.Element == T
     {
         return Enumerable { [unowned self] () -> AnyIterator<T> in
@@ -777,7 +777,7 @@ open class Enumerable<T>: Sequence {
     - parameter keySelector: - A function to generate the keys to compare
     - returns: A sequence that contains the elements that form the set intersection of two sequences
     */
-    final func intersect<TKey: Hashable, TSecond: Sequence>
+    public func intersect<TKey: Hashable, TSecond: Sequence>
         (_ second: TSecond, keySelector: @escaping (T) -> TKey) -> Enumerable<T>
         where TSecond.Iterator.Element == T,
             TSecond.SubSequence : Sequence,
@@ -811,7 +811,7 @@ open class Enumerable<T>: Sequence {
     - parameter comparer: - An equality comparer to compare values
     - returns: A sequence that contains the elements that form the set intersection of two sequences
     */
-    final func intersect<TSecond: Sequence>
+    public func intersect<TSecond: Sequence>
         (_ second: TSecond, comparer: @escaping (T, T) -> Bool) -> Enumerable<T>
         where TSecond.Iterator.Element == T,
             TSecond.SubSequence : Sequence,
@@ -843,7 +843,7 @@ open class Enumerable<T>: Sequence {
     - parameter second: - A sequence to compare to the first sequence
     - returns: true if the two source sequences are of equal length and their corresponding elements compare equal according to comparer; otherwise, false
     */
-    final func sequenceEqual<TSequence: Sequence>
+    public func sequenceEqual<TSequence: Sequence>
         (_ second: TSequence, comparer: (T, T) -> Bool) -> Bool where TSequence.Iterator.Element == T
     {
         let firstGenerator = self.makeIterator()
@@ -870,7 +870,7 @@ open class Enumerable<T>: Sequence {
     - parameter comparer: - The equality comparer to compare values
     - returns: An Enumerable<T> that contains the elements from both input sequences, excluding duplicates
     */
-    final func union<TSequence: Sequence>
+    public func union<TSequence: Sequence>
         (_ second: TSequence, comparer: @escaping (T, T) -> Bool) -> Enumerable<T> where TSequence.Iterator.Element == T
     {
         return Enumerable { [unowned self] () -> AnyIterator<T> in
@@ -907,7 +907,7 @@ open class Enumerable<T>: Sequence {
     - parameter keySelector: - A function to generate the keys to compare
     - returns: An Enumerable<T> that contains the elements from both input sequences, excluding duplicates
     */
-    final func union<TKey: Hashable, TSequence: Sequence>
+    public func union<TKey: Hashable, TSequence: Sequence>
         (_ second: TSequence, keySelector: @escaping (T) -> TKey) -> Enumerable<T> where TSequence.Iterator.Element == T
     {
         return Enumerable { [unowned self] () -> AnyIterator<T> in
@@ -950,7 +950,7 @@ open class Enumerable<T>: Sequence {
     - parameter keySelector: - A function to extract a key from an element
     - returns: An OrderedEnumerable<T> whose elements are sorted according to a key
     */
-    final func orderBy<TKey: Comparable>(_ keySelector: @escaping (T) -> TKey) -> OrderedEnumerable<T> {
+    public func orderBy<TKey: Comparable>(_ keySelector: @escaping (T) -> TKey) -> OrderedEnumerable<T> {
         return OrderedEnumerable(source: source, comparer: { keySelector($0) < keySelector($1) })
     }
 
@@ -960,7 +960,7 @@ open class Enumerable<T>: Sequence {
     - parameter keySelector: - A function to extract a key from an element
     - returns: An OrderedEnumerable<T> whose elements are sorted in descending order according to a key
     */
-    final func orderByDescending<TKey: Comparable>(_ keySelector: @escaping (T) -> TKey) -> OrderedEnumerable<T> {
+    public func orderByDescending<TKey: Comparable>(_ keySelector: @escaping (T) -> TKey) -> OrderedEnumerable<T> {
         return OrderedEnumerable(source: source, comparer: { keySelector($0) > keySelector($1) })
     }
 
@@ -969,7 +969,7 @@ open class Enumerable<T>: Sequence {
 
     - returns: A sequence whose elements correspond to those of the input sequence in reverse order
     */
-    final func reverse() -> Enumerable<T> {
+    public func reverse() -> Enumerable<T> {
         return Enumerable { () -> IndexingIterator<[T]> in
             Array(self.toArray().reversed()).makeIterator()
         }
@@ -985,7 +985,7 @@ open class Enumerable<T>: Sequence {
     - parameter keySelector: - A function to extract the key for each element
     - returns: A collection of Grouping<TKey, T> objects, one for each distinct key that was encountered
     */
-    final func groupBy<TKey: Hashable>(_ keySelector: @escaping (T) -> TKey) -> Enumerable<Grouping<TKey, T>> {
+    public func groupBy<TKey: Hashable>(_ keySelector: @escaping (T) -> TKey) -> Enumerable<Grouping<TKey, T>> {
         return self.groupBy(keySelector) { $0 }
     }
 
@@ -997,7 +997,7 @@ open class Enumerable<T>: Sequence {
     - parameter elementSelector: - A function to map each source element to an element in the Grouping<TKey, TElement>
     - returns: A collection of Grouping<TKey, TElement> objects, one for each distinct key that was encountered
     */
-    final func groupBy<TKey: Hashable, TElement>
+    public func groupBy<TKey: Hashable, TElement>
         (_ keySelector: @escaping (T) -> TKey, elementSelector: @escaping (T) -> TElement) -> Enumerable<Grouping<TKey, TElement>>
     {
         return Enumerable<Grouping<TKey, TElement>> { () -> AnyIterator<Grouping<TKey, TElement>> in
@@ -1023,7 +1023,7 @@ open class Enumerable<T>: Sequence {
     - parameter resultSelector: - A function to create a result value from each group
     - returns: A collection of Grouping<TKey, TResult> objects, one for each distinct key that was encountered
     */
-    final func groupBy<TKey: Hashable, TResult>
+    public func groupBy<TKey: Hashable, TResult>
         (_ keySelector: @escaping (T) -> TKey, resultSelector: @escaping (TKey, Enumerable<T>) -> TResult) -> Enumerable<TResult>
     {
         return Enumerable<TResult> { [unowned self] () -> AnyIterator<TResult> in
@@ -1050,7 +1050,7 @@ open class Enumerable<T>: Sequence {
     - parameter resultSelector: - A function to create a result value from each group
     - returns: A collection of Grouping<TKey, TResult> objects, one for each distinct key that was encountered
     */
-    final func groupBy<TKey: Hashable, TElement, TResult>(
+    public func groupBy<TKey: Hashable, TElement, TResult>(
         _ keySelector: @escaping (T) -> TKey,
         elementSelector: @escaping (T) -> TElement,
         resultSelector: @escaping (TKey, Enumerable<TElement>) -> TResult
@@ -1080,7 +1080,7 @@ open class Enumerable<T>: Sequence {
     - parameter accumulator: - An accumulator function to be invoked on each element
     - returns: The final accumulator value or nil
     */
-    final func aggregate(_ accumulator:  (T, T) -> T) -> T? {
+    public func aggregate(_ accumulator:  (T, T) -> T) -> T? {
         let generator = self.makeIterator()
         if var result = generator.next() {
             while let element = generator.next() {
@@ -1099,7 +1099,7 @@ open class Enumerable<T>: Sequence {
     - parameter accumulator: - An accumulator function to be invoked on each element
     - returns: The final accumulator value
     */
-    final func aggregate<TAccumulate>(
+    public func aggregate<TAccumulate>(
         _ seed: TAccumulate,
         accumulator: (TAccumulate, T) -> TAccumulate
         ) -> TAccumulate
@@ -1119,7 +1119,7 @@ open class Enumerable<T>: Sequence {
     - parameter resultSelector: - A function to transform the final accumulator value into the result value
     - returns: The transformed final accumulator value
     */
-    final func aggregate<TAccumulate, TResult>(
+    public func aggregate<TAccumulate, TResult>(
         _ seed: TAccumulate,
         accumulator: (TAccumulate, T) -> TAccumulate,
         resultSelector: (TAccumulate) -> TResult
@@ -1136,7 +1136,7 @@ open class Enumerable<T>: Sequence {
     - parameter selector: - A transform function to apply to each element
     - returns: The average of the sequence of values
     */
-    final func average<N: NumericType>(_ selector: (T) -> N) -> Double {
+    public func average<N: NumericType>(_ selector: (T) -> N) -> Double {
         var count = 0
         let total = self.aggregate(0) { (x: N, y: T) -> N in
             count += 1
@@ -1151,7 +1151,7 @@ open class Enumerable<T>: Sequence {
 
     - returns: The number of elements in the input sequence
     */
-    final func count() -> Int {
+    public func count() -> Int {
         var count = 0
         self.each { (_: T) -> Void in count += 1 }
         return count
@@ -1163,7 +1163,7 @@ open class Enumerable<T>: Sequence {
     - parameter predicate: - A function to test each element for a condition
     - returns: A number that represents how many elements in the sequence satisfy the condition in the predicate function
     */
-    final func count(_ predicate: @escaping (T) -> Bool) -> Int {
+    public func count(_ predicate: @escaping (T) -> Bool) -> Int {
         return self.where$(predicate).aggregate(0) { (x, _) -> Int in x + 1 }
     }
 
@@ -1173,7 +1173,7 @@ open class Enumerable<T>: Sequence {
     - parameter selector: - A transform function to apply to each element
     - returns: The maximum value in the sequence or nil if the sequence is empty
     */
-    final func max<TValue: Comparable>(_ selector: (T) -> TValue) -> TValue? {
+    public func max<TValue: Comparable>(_ selector: (T) -> TValue) -> TValue? {
         let generator = self.makeIterator()
         var max: TValue? = nil
         if let first = generator.next() {
@@ -1196,7 +1196,7 @@ open class Enumerable<T>: Sequence {
     - parameter selector: - A transform function to apply to each element
     - returns: The minimum value in the sequence or nil if the sequence is empty
     */
-    final func min<TValue: Comparable>(_ selector: (T) -> TValue) -> TValue? {
+    public func min<TValue: Comparable>(_ selector: (T) -> TValue) -> TValue? {
         let generator = self.makeIterator()
         var min: TValue? = nil
         if let first = generator.next() {
@@ -1220,7 +1220,7 @@ open class Enumerable<T>: Sequence {
     - parameter selector: - A transform function to apply to each element
     - returns: The sum of the projected values
     */
-    final func sum<N: NumericType>(_ selector: @escaping (T) -> N) -> N {
+    public func sum<N: NumericType>(_ selector: @escaping (T) -> N) -> N {
         return self.select(selector).aggregate(0) { $0 + $1 }
     }
 
@@ -1234,7 +1234,7 @@ open class Enumerable<T>: Sequence {
     - parameter index: - The zero-based index of the element to retrieve
     - returns: The element at the specified position in the source sequence or nil if the index is out of range
     */
-    final func elementAt(_ index: Int) -> T? {
+    public func elementAt(_ index: Int) -> T? {
         return self.elementAt(index, defaultValue: nil)
     }
 
@@ -1245,7 +1245,7 @@ open class Enumerable<T>: Sequence {
     - parameter defaultValue: - The value to return if the index is out of range
     - returns: defaultValue if the index is outside the bounds of the source sequence; otherwise, the element at the specified position in the source sequence
     */
-    final func elementAtOrDefault(_ index: Int, defaultValue: T) -> T {
+    public func elementAtOrDefault(_ index: Int, defaultValue: T) -> T {
         return self.elementAt(index, defaultValue: defaultValue)!
     }
 
@@ -1254,7 +1254,7 @@ open class Enumerable<T>: Sequence {
 
     - returns: The first element in the specified sequence, or nil if sequence is empty
     */
-    final func first() -> T? {
+    public func first() -> T? {
         let generator = self.makeIterator()
         return generator.next()
     }
@@ -1265,7 +1265,7 @@ open class Enumerable<T>: Sequence {
     - parameter predicate: - A function to test each element for a condition
     - returns: The first element in the sequence that passes the test in the specified predicate function, or nil If no elements pass the test in the predicate function
     */
-    final func first(_ predicate: @escaping (T) -> Bool) -> T? {
+    public func first(_ predicate: @escaping (T) -> Bool) -> T? {
         let generator = self.where$(predicate).makeIterator()
         return generator.next()
     }
@@ -1276,7 +1276,7 @@ open class Enumerable<T>: Sequence {
     - parameter defaultValue: - The value to return if the source sequence is empty
     - returns: defaultValue if source is empty; otherwise, the first element in source
     */
-    final func firstOrDefault(_ defaultValue: T) -> T {
+    public func firstOrDefault(_ defaultValue: T) -> T {
         let generator = self.makeIterator()
         return self.firstOrDefault(generator, defaultValue: defaultValue)
     }
@@ -1289,7 +1289,7 @@ open class Enumerable<T>: Sequence {
     - parameter predicate: - A function to test each element for a condition
     - returns: defaultValue if source is empty or if no element passes the test specified by predicate; otherwise, the first element in source that passes the test specified by predicate
     */
-    final func firstOrDefault(_ defaultValue: T, predicate: @escaping (T) -> Bool) -> T {
+    public func firstOrDefault(_ defaultValue: T, predicate: @escaping (T) -> Bool) -> T {
         let generator = self.where$(predicate).makeIterator()
         return self.firstOrDefault(generator, defaultValue: defaultValue)
     }
@@ -1299,7 +1299,7 @@ open class Enumerable<T>: Sequence {
 
     - returns: The value at the last position in the source sequence or nil if sequence is empty
     */
-    final func last() -> T? {
+    public func last() -> T? {
         let generator = self.makeIterator()
         var lastElement: T? = nil
         while let element = generator.next() {
@@ -1314,7 +1314,7 @@ open class Enumerable<T>: Sequence {
     - parameter predicate: - A function to test each element for a condition
     - returns: The last element in the sequence that passes the test in the specified predicate function, or nil If no elements pass the test in the predicate function
     */
-    final func last(_ predicate: (T) -> Bool) -> T? {
+    public func last(_ predicate: (T) -> Bool) -> T? {
         let generator = self.makeIterator()
         var lastElement: T? = nil
         while let element = generator.next() {
@@ -1331,7 +1331,7 @@ open class Enumerable<T>: Sequence {
     - parameter defaultValue: - The value to return if the source sequence is empty
     - returns: defaultValue if the source sequence is empty; otherwise, the last element in the sequence
     */
-    final func lastOrDefault(_ defaultValue: T) -> T {
+    public func lastOrDefault(_ defaultValue: T) -> T {
         if let lastElement = last() {
             return lastElement
         }
@@ -1346,7 +1346,7 @@ open class Enumerable<T>: Sequence {
     - parameter predicate: - A function to test each element for a condition
     - returns: defaultValue if the sequence is empty or if no elements pass the test in the predicate function; otherwise, the last element that passes the test in the predicate function
     */
-    final func lastOrDefault(_ defaultValue: T, predicate: (T) -> Bool) -> T {
+    public func lastOrDefault(_ defaultValue: T, predicate: (T) -> Bool) -> T {
         if let lastElement = last(predicate) {
             return lastElement
         }
@@ -1359,7 +1359,7 @@ open class Enumerable<T>: Sequence {
 
     - returns: nil if the sequence is empty or not single element; otherwise, The single element of the input sequence
     */
-    final func single() -> T? {
+    public func single() -> T? {
         let generator = self.makeIterator()
         return self.single(generator, defaultValue: nil)
     }
@@ -1371,7 +1371,7 @@ open class Enumerable<T>: Sequence {
     - parameter predicate: - A function to test an element for a condition
     - returns: The single element of the input sequence that satisfies a condition, or nil if more than one such element exists
     */
-    final func single(_ predicate: @escaping (T) -> Bool) -> T? {
+    public func single(_ predicate: @escaping (T) -> Bool) -> T? {
         let generator = self.where$(predicate).makeIterator()
         return self.single(generator, defaultValue: nil)
     }
@@ -1383,7 +1383,7 @@ open class Enumerable<T>: Sequence {
     - parameter defaultValue: - The value to return if the sequence is empty
     - returns: The single element of the input sequence, or defaultValue if the sequence contains no elements, or nil if there is more than one element in the sequence
     */
-    final func singleOrDefault(_ defaultValue: T) -> T? {
+    public func singleOrDefault(_ defaultValue: T) -> T? {
         let generator = self.makeIterator()
         return self.single(generator, defaultValue: defaultValue)
     }
@@ -1397,7 +1397,7 @@ open class Enumerable<T>: Sequence {
     - parameter predicate: - A function to test an element for a condition
     - returns: The single element of the input sequence that satisfies the condition, or defaultValue if no such element is found, or nil if more than one element satisfies the condition
     */
-    final func singleOrDefault(_ defaultValue: T, predicate: @escaping (T) -> Bool) -> T? {
+    public func singleOrDefault(_ defaultValue: T, predicate: @escaping (T) -> Bool) -> T? {
         let generator = self.where$(predicate).makeIterator()
         return self.single(generator, defaultValue: defaultValue)
     }
@@ -1408,7 +1408,7 @@ open class Enumerable<T>: Sequence {
     - parameter count: - The number of elements to skip before returning the remaining elements
     - returns: An Enumerable<T> that contains the elements that occur after the specified index in the input sequence
     */
-    final func skip(_ count: Int) -> Enumerable {
+    public func skip(_ count: Int) -> Enumerable {
         return Enumerable { () -> AnyIterator<T> in
             let generator = self.makeIterator()
             for _ in 0..<count { let _ = generator.next() }
@@ -1423,7 +1423,7 @@ open class Enumerable<T>: Sequence {
     - parameter predicate: - A function to test each element for a condition
     - returns: An Enumerable<T> that contains the elements from the input sequence starting at the first element in the linear series that does not pass the test specified by predicate
     */
-    final func skipWhile(_ predicate: @escaping (T) -> Bool) -> Enumerable {
+    public func skipWhile(_ predicate: @escaping (T) -> Bool) -> Enumerable {
         return self.skipWhile { (x, _) -> Bool in predicate(x) }
     }
 
@@ -1435,7 +1435,7 @@ open class Enumerable<T>: Sequence {
     - parameter predicate: - A function to test each source element for a condition; the second parameter of the function represents the index of the source element
     - returns: An IEnumerable<T> that contains the elements from the input sequence starting at the first element in the linear series that does not pass the test specified by predicate
     */
-    final func skipWhile(_ predicate: @escaping (T, Int) -> Bool) -> Enumerable {
+    public func skipWhile(_ predicate: @escaping (T, Int) -> Bool) -> Enumerable {
         return Enumerable { [unowned self] () -> AnyIterator<T> in
             let generator = self.makeIterator()
             var index = -1
@@ -1463,7 +1463,7 @@ open class Enumerable<T>: Sequence {
     - parameter count: - The number of elements to return
     - returns: An Enumerable<T> that contains the specified number of elements from the start of the input sequence
     */
-    final func take(_ count: Int) -> Enumerable {
+    public func take(_ count: Int) -> Enumerable {
         return Enumerable { () -> AnyIterator<T> in
             let generator = self.makeIterator()
             var index = 0
@@ -1483,7 +1483,7 @@ open class Enumerable<T>: Sequence {
     - parameter predicate: - A function to test each element for a condition
     - returns: An Enumerable<T> that contains the elements from the input sequence that occur before the element at which the test no longer passes
     */
-    final func takeWhile(_ predicate: @escaping (T) -> Bool) -> Enumerable {
+    public func takeWhile(_ predicate: @escaping (T) -> Bool) -> Enumerable {
         return self.takeWhile { (x, _) -> Bool in predicate(x) }
     }
 
@@ -1494,7 +1494,7 @@ open class Enumerable<T>: Sequence {
     - parameter predicate: - A function to test each source element for a condition; the second parameter of the function represents the index of the source element
     - returns: An Enumerable<T> that contains elements from the input sequence that occur before the element at which the test no longer passes
     */
-    final func takeWhile(_ predicate: @escaping (T, Int) -> Bool) -> Enumerable {
+    public func takeWhile(_ predicate: @escaping (T, Int) -> Bool) -> Enumerable {
         return Enumerable { [unowned self] () -> AnyIterator<T> in
             let generator = self.makeIterator()
             var index = -1
@@ -1520,7 +1520,7 @@ open class Enumerable<T>: Sequence {
 
     - returns: An array that contains the elements from the input sequence
     */
-    final func toArray() -> Array<T> {
+    public func toArray() -> Array<T> {
         return [T](self)
     }
 
@@ -1531,7 +1531,7 @@ open class Enumerable<T>: Sequence {
     - parameter keySelector: - A function to extract a key from each element
     - returns: A Dictionary<TKey, T> that contains keys and values, or nil if duplicate key exists
     */
-    final func toDictionary<TKey: Hashable>(_ keySelector: (T) -> TKey) -> Dictionary<TKey, T>? {
+    public func toDictionary<TKey: Hashable>(_ keySelector: (T) -> TKey) -> Dictionary<TKey, T>? {
         return self.toDictionary(keySelector) { $0 }
     }
 
@@ -1544,7 +1544,7 @@ open class Enumerable<T>: Sequence {
     - parameter elementSelector: - A transform function to produce a result element value from each element
     - returns: A Dictionary<TKey, TValue> that contains values of type TValue selected from the input sequence, or nil if duplicate key exists
     */
-    final func toDictionary<TKey: Hashable, TValue>
+    public func toDictionary<TKey: Hashable, TValue>
         (_ keySelector: (T) -> TKey, elementSelector: (T) -> TValue) -> Dictionary<TKey, TValue>?
     {
         var dict = [TKey: TValue]()
@@ -1565,7 +1565,7 @@ open class Enumerable<T>: Sequence {
     - parameter keySelector: - A function to extract a key from each element
     - returns: A Lookup<TKey, T> that contains keys and values
     */
-    final func toLookup<TKey: Hashable>(_ keySelector: (T) -> TKey) -> Lookup<TKey, T> {
+    public func toLookup<TKey: Hashable>(_ keySelector: (T) -> TKey) -> Lookup<TKey, T> {
         return Lookup(source: sequenceToGroupDictionary(self, keySelector: keySelector))
     }
 
@@ -1577,7 +1577,7 @@ open class Enumerable<T>: Sequence {
     - parameter elementSelector: - A transform function to produce a result element value from each element
     - returns: A Lookup<TKey, TElement> that contains values of type TElement selected from the input sequence
     */
-    final func toLookup<TKey: Hashable, TElement>
+    public func toLookup<TKey: Hashable, TElement>
         (_ keySelector: (T) -> TKey, elementSelector: (T) -> TElement) -> Lookup<TKey, TElement>
     {
         return Lookup(source: sequenceToGroupDictionary(self, keySelector: keySelector, valueSelector: elementSelector))
@@ -1592,7 +1592,7 @@ open class Enumerable<T>: Sequence {
 
     - parameter action: - A function to perform on each element of the source sequence
     */
-    final func each(_ action: (T) -> Void) {
+    public func each(_ action: (T) -> Void) {
         self.each { (x, _) in action(x) }
     }
 
@@ -1602,7 +1602,7 @@ open class Enumerable<T>: Sequence {
 
     - parameter action: - A function to perform on each element of the source sequence; the second parameter of the function represents the index of the source element
     */
-    final func each(_ action: (T, Int) -> Void) {
+    public func each(_ action: (T, Int) -> Void) {
         var index = -1
         for element in self {
             index += 1
@@ -1613,7 +1613,7 @@ open class Enumerable<T>: Sequence {
     /**
     Executes the query that has been delayed
     */
-    final func force() -> Void {
+    public func force() -> Void {
         let generator = self.makeIterator()
         while let _ = generator.next() {
             // nothing
@@ -1629,7 +1629,7 @@ open class Enumerable<T>: Sequence {
 
     - returns: The sequence
     */
-    final func dump() -> Enumerable {
+    public func dump() -> Enumerable {
         return Enumerable { [unowned self] () -> AnyIterator<T> in
             let generator = self.makeIterator()
             return AnyIterator {
@@ -1647,7 +1647,7 @@ open class Enumerable<T>: Sequence {
 
     - returns: The sequence
     */
-    final func print() -> Enumerable {
+    public func print() -> Enumerable {
         return Enumerable { [unowned self] () -> AnyIterator<T> in
             let generator = self.makeIterator()
             return AnyIterator {
@@ -1666,7 +1666,7 @@ open class Enumerable<T>: Sequence {
     - parameter formatter: - A function to format to string
     - returns: The sequence
     */
-    final func print(_ formatter: @escaping (T) -> String) -> Enumerable {
+    public func print(_ formatter: @escaping (T) -> String) -> Enumerable {
         return Enumerable { () -> AnyIterator<T> in
             let generator = self.makeIterator()
             return AnyIterator {
@@ -1684,7 +1684,7 @@ open class Enumerable<T>: Sequence {
 
     - returns: The sequence
     */
-    final func println() -> Enumerable {
+    public func println() -> Enumerable {
         return Enumerable { [unowned self] () -> AnyIterator<T> in
             let generator = self.makeIterator()
             return AnyIterator {
@@ -1703,7 +1703,7 @@ open class Enumerable<T>: Sequence {
     - parameter formatter: - A function to format to string
     - returns: The sequence
     */
-    final func println(_ formatter: @escaping (T) -> String) -> Enumerable {
+    public func println(_ formatter: @escaping (T) -> String) -> Enumerable {
         return Enumerable { [unowned self] () -> AnyIterator<T> in
             let generator = self.makeIterator()
             return AnyIterator {
@@ -1920,25 +1920,25 @@ extension Grouping: Sequence {
 /**
 Represents a collection of keys each mapped to one or more values
 */
-open class Lookup<TKey: Hashable, TElement> {
+public class Lookup<TKey: Hashable, TElement> {
     let data: Dictionary<TKey, Array<TElement>>
 
-    init(source: Dictionary<TKey, Array<TElement>>) {
+    public init(source: Dictionary<TKey, Array<TElement>>) {
         data = source
     }
 
-    subscript(key: TKey) -> Enumerable<TElement> {
+    public subscript(key: TKey) -> Enumerable<TElement> {
         if let elements = data[key] {
             return Enumerable.from(elements)
         }
         return Enumerable<TElement>.empty()
     }
 
-    func count() -> Int {
+    public func count() -> Int {
         return data.count
     }
 
-    func contains(_ key: TKey) -> Bool {
+    public func contains(_ key: TKey) -> Bool {
         return data[key] != nil
     }
 }
@@ -1946,8 +1946,8 @@ open class Lookup<TKey: Hashable, TElement> {
 /**
 Represents a sorted sequence
 */
-open class OrderedEnumerable<T> : Enumerable<T> {
-    open override func makeIterator() -> AnyIterator<T> {
+public class OrderedEnumerable<T> : Enumerable<T> {
+    public override func makeIterator() -> AnyIterator<T> {
         var array = Enumerable.from(source).toArray()
         array.sort {
             [unowned self] (a: T, b: T) in
@@ -1990,7 +1990,7 @@ open class OrderedEnumerable<T> : Enumerable<T> {
     - parameter keySelector: - A function to extract a key from each element
     - returns: An OrderedEnumerable<T> whose elements are sorted according to a key
     */
-    public final func thenBy<TKey: Comparable>(_ keySelector: @escaping (T) -> TKey) -> OrderedEnumerable<T> {
+    public func thenBy<TKey: Comparable>(_ keySelector: @escaping (T) -> TKey) -> OrderedEnumerable<T> {
         var newComparers = comparers
         newComparers.append { keySelector($0) < keySelector($1) }
         return OrderedEnumerable(source: source, comparers: newComparers)
@@ -2002,7 +2002,7 @@ open class OrderedEnumerable<T> : Enumerable<T> {
     - parameter keySelector: - A function to extract a key from each element
     - returns: An OrderedEnumerable<T> whose elements are sorted in descending order according to a key
     */
-    public final func thenByDescending<TKey: Comparable>(_ keySelector: @escaping (T) -> TKey) -> OrderedEnumerable<T> {
+    public func thenByDescending<TKey: Comparable>(_ keySelector: @escaping (T) -> TKey) -> OrderedEnumerable<T> {
         var newComparers = comparers
         newComparers.append { keySelector($0) > keySelector($1) }
         return OrderedEnumerable(source: source, comparers: newComparers)
@@ -2014,7 +2014,7 @@ open class OrderedEnumerable<T> : Enumerable<T> {
     - parameter predicate: - A function to test each element for a condition
     - returns: An Enumerable<T> that contains elements from the input sequence that satisfy the condition
     */
-    public final override func where$(_ predicate: @escaping (T) -> Bool) -> OrderedEnumerable<T> {
+    public override func where$(_ predicate: @escaping (T) -> Bool) -> OrderedEnumerable<T> {
         return OrderedEnumerable(source: Enumerable.from(source).where$(predicate), comparers: comparers)
     }
 
@@ -2025,7 +2025,7 @@ open class OrderedEnumerable<T> : Enumerable<T> {
     - parameter predicate: - A function to test each element for a condition; the second parameter of the function represents the index of the source element
     - returns: An Enumerable<T> that contains elements from the input sequence that satisfy the condition
     */
-    public final override func where$(_ predicate: @escaping (T, Int) -> Bool) -> OrderedEnumerable<T> {
+    public override func where$(_ predicate: @escaping (T, Int) -> Bool) -> OrderedEnumerable<T> {
         return OrderedEnumerable(source: Enumerable.from(source).where$(predicate), comparers: comparers)
     }
 }
