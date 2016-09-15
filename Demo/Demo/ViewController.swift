@@ -14,6 +14,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+
+        examples()
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,6 +47,9 @@ class ViewController: UIViewController {
             .where$ { $0.age < 30 }
             .where$ { $0.gender == .female }
             .select { $0.name }
+        for name in result {
+            print(name)
+        }
 
         // get people of 20s by gender
         let result2 = people.toEnumerable()
@@ -53,15 +58,15 @@ class ViewController: UIViewController {
             .toLookup { $0.gender }
         // males
         for male in result2[.male] {
-            println(male.name)
+            print(male.name)
         }
         // females
         for female in result2[.female] {
-            println(female.name)
+            print(female.name)
         }
         // others
         for other in result2[.other] {
-            println(other.name)
+            print(other.name)
         }
     }
 }
