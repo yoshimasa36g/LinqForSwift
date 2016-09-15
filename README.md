@@ -298,7 +298,7 @@ final func ofType<TResult>(resultType: TResult.Type) -> Enumerable<TResult>
 ##### example
 
 ```swift
-let result = Enumerable.from([1, "a", 2, "b", 3, "c"]).ofType(String)
+let result = Enumerable.from([1, "a", 2, "b", 3, "c"]).ofType(String.self)
 > a, b, c
 ```
 
@@ -635,8 +635,8 @@ final func distinct(comparer: (T, T) -> Bool) -> Enumerable
 let result = Enumerable.from([1, 1, 3, 2, 2, 3]).distinct { $0 }
 > 1, 3, 2
 
-let result = Enumerable.from([1, 5, 2, 3, 6, 4]).distinct { $0 > $1 }
-> 1, 5, 6
+let result = Enumerable.from([1, 1, 2, 3, 4, 4]).distinct { $0 == $1 }
+> 1, 2, 3, 4
 ```
 
 #### except
@@ -665,7 +665,7 @@ let result = Enumerable.from(array1).except(array2) { $0 }
 
 let array1 = Enumerable.from(["a", "b", "c", "d", "e"])
 let array2 = Enumerable.from(["B", "C", "E"])
-let result = Enumerable.from(array1).except(array2) { $0.uppercaseString == $1}
+let result = Enumerable.from(array1).except(array2) { $0.uppercased() == $1 }
 > a, d
 ```
 
@@ -695,7 +695,7 @@ let result = Enumerable.from(array1).intersect(array2) { $0 }
 
 let array1 = Enumerable.from(["a", "b", "c", "d", "e"])
 let array2 = Enumerable.from(["B", "C", "E"])
-let result = Enumerable.from(array1).intersect(array2) { $0.uppercaseString == $1}
+let result = Enumerable.from(array1).intersect(array2) { $0.uppercased() == $1 }
 > b, c, e
 ```
 
@@ -1378,7 +1378,7 @@ result[false]> 10, 30, 50, 70, 90
 
 ### action methods <a name="action" />
 
-#### each, eachWithIndex
+#### each
 
 Performs the specified action on each element of the sequence.
 
@@ -1387,18 +1387,18 @@ Performs the specified action on each element of the sequence.
 ```swift
 final func each(action: T -> Void)
 
-final func eachWithIndex(action: (T, Int) -> Void)
+final func each(action: (T, Int) -> Void)
 ```
 
 ##### example
 
 ```swift
 Enumerable.from(["a", "b", "c", "d", "e"]).each { Swift.print($0) }
-> abcde
+> a, b, c, d, e
 
 Enumerable.from(["a", "b", "c", "d", "e"])
-    .eachWithIndex { Swift.print("\($1):\($0),") }
-> 0:a,1:b,2:c,3:d,4:e,
+    .each { Swift.print("\($1):\($0)") }
+> 0:a, 1:b, 2:c, 3:d, 4:e
 ```
 
 #### force
